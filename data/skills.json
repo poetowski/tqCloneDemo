@@ -1,0 +1,39 @@
+{
+  "_doc": "The Loom: the hero's skills (docs/GAME_DESIGN.md#skills-the-loom). params: name -> [value at rank 1, change per rank]. slot: the input that casts it (skill_1 = right mouse, skill_2..5 = Q W E R). cost is ichor; cooldown in seconds.",
+  "lunge": {
+    "name": "Lunge", "kind": "active", "slot": 1, "unlock": 1, "max_rank": 5, "icon": "lunge",
+    "cost": 8, "cooldown": [3.0, -0.2],
+    "params": {"distance": [6.0, 0.5], "damage": [1.3, 0.15]},
+    "desc": "Drive forward with spear or blade, striking every foe in your path for {damage}% weapon damage over {distance} m."
+  },
+  "aspis_bash": {
+    "name": "Aspis Bash", "kind": "active", "slot": 2, "unlock": 1, "max_rank": 5, "icon": "aspis_bash",
+    "cost": 12, "cooldown": [6.0, 0.0],
+    "params": {"damage": [0.9, 0.12], "stun": [1.0, 0.2], "radius": [3.2, 0.0]},
+    "desc": "Smash your shield into the foes before you: {damage}% weapon damage, stunned for {stun} s."
+  },
+  "fates_lash": {
+    "name": "Fate's Lash", "kind": "active", "slot": 3, "unlock": 2, "max_rank": 5, "icon": "fates_lash",
+    "cost": 18, "cooldown": [7.0, -0.3],
+    "params": {"damage": [1.0, 0.15], "radius": [4.6, 0.2], "pull": [2.2, 0.0]},
+    "desc": "Unspool the golden thread and whip it around you: {damage}% weapon damage within {radius} m, dragging foes toward you."
+  },
+  "war_cry": {
+    "name": "War Cry of Ares", "kind": "active", "slot": 4, "unlock": 3, "max_rank": 5, "icon": "war_cry",
+    "cost": 25, "cooldown": [18.0, 0.0],
+    "params": {"damage_pct": [25.0, 5.0], "speed_pct": [15.0, 3.0], "duration": [8.0, 0.5], "slow": [0.4, 0.0], "radius": [7.0, 0.0]},
+    "desc": "Bellow the war-god's name: +{damage_pct}% damage and +{speed_pct}% attack speed for {duration} s. Foes nearby falter."
+  },
+  "bound_shades": {
+    "name": "Bound Shades", "kind": "active", "slot": 5, "unlock": 5, "max_rank": 5, "icon": "bound_shades",
+    "cost": 35, "cooldown": [30.0, -1.0],
+    "params": {"count": [2.0, 0.34], "duration": [15.0, 2.0], "power": [0.6, 0.1]},
+    "desc": "Snare wandering shades with golden thread; {count} fight beside you for {duration} s."
+  },
+  "atropos_mercy": {
+    "name": "Atropos' Mercy", "kind": "passive", "slot": 0, "unlock": 1, "max_rank": 5, "icon": "atropos_mercy",
+    "cost": 0, "cooldown": [0.0, 0.0],
+    "params": {"threshold": [8.0, 2.0]},
+    "desc": "Your blows find the frayed end of every thread: foes under {threshold}% health are severed outright. Bosses are spared."
+  }
+}

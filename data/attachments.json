@@ -1,0 +1,7 @@
+{
+  "_doc": "Where item models sit on a skeleton, in the bone's own axes (Godot and Blender agree: Y runs along the bone from head to tail, Z is the body's front for hanging and upright bones). offset in metres from the bone's head; rotation in degrees, XYZ order, turning the item's model axes (Godot: Y up the blade, Z the front) onto the bone. Read by src/actors/actor_body.gd and tools/blender/render/preview.py. Items are modelled with the grip (weapons), centre (shields) or head-bone base (helmets) at the origin.",
+  "weapon": {"bone": "RightHand", "offset": [0.0, 0.075, -0.005], "rotation": [90, 0, 0]},
+  "bow": {"bone": "LeftHand", "offset": [0.0, 0.075, 0.0], "rotation": [90, 0, 0]},
+  "shield": {"bone": "LeftLowerArm", "offset": [0.075, 0.15, 0.0], "rotation": [0, 90, 0]},
+  "helmet": {"bone": "Head", "offset": [0.0, 0.0, 0.0], "rotation": [0, 0, 0]}
+}

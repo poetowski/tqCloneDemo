@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/world/level.gd" id="1_level"]
+[ext_resource type="Script" path="res://src/world/spawner.gd" id="2_spawner"]
+[ext_resource type="PackedScene" path="res://assets/models/props/pithos/pithos.glb" id="3_pithos"]
+[ext_resource type="PackedScene" path="res://assets/models/props/amphora/amphora.glb" id="4_amphora"]
+
+[sub_resource type="NavigationMesh" id="nav"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 33
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_geometry"
+cell_size = 0.25
+cell_height = 0.25
+agent_height = 2.0
+agent_radius = 0.5
+agent_max_climb = 0.5
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_top_color = Color(0.36, 0.52, 0.74, 1)
+sky_horizon_color = Color(0.93, 0.8, 0.62, 1)
+ground_bottom_color = Color(0.3, 0.26, 0.2, 1)
+ground_horizon_color = Color(0.85, 0.74, 0.58, 1)
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+ambient_light_energy = 0.8
+tonemap_mode = 4
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="ground_shape"]
+size = Vector3(80, 1, 80)
+
+[sub_resource type="PlaneMesh" id="ground_mesh"]
+size = Vector2(80, 80)
+
+[sub_resource type="StandardMaterial3D" id="ground_mat"]
+albedo_color = Color(0.72, 0.65, 0.42, 1)
+roughness = 0.95
+
+[node name="Arena" type="Node3D"]
+script = ExtResource("1_level")
+start_marker = NodePath("Start")
+title = "The Arena"
+subtitle = "A place to test the thread"
+
+[node name="Start" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, -0.6, 0.62, 0, 0.72, 0.69, -0.87, -0.35, 0.36, 0, 6, 0)
+light_color = Color(1, 0.88, 0.69, 1)
+light_energy = 1.6
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("nav")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" groups=["navigation_geometry"]]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("ground_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+mesh = SubResource("ground_mesh")
+surface_material_override/0 = SubResource("ground_mat")
+
+[node name="Props" type="Node3D" parent="NavigationRegion3D" groups=["navigation_geometry"]]
+
+[node name="Pithos1" parent="NavigationRegion3D/Props" instance=ExtResource("3_pithos")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
+
+[node name="Pithos2" parent="NavigationRegion3D/Props" instance=ExtResource("3_pithos")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -4)
+
+[node name="Amphora1" parent="NavigationRegion3D/Props" instance=ExtResource("4_amphora")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
+
+[node name="Amphora2" parent="NavigationRegion3D/Props" instance=ExtResource("4_amphora")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 2)
+
+[node name="PackA" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+script = ExtResource("2_spawner")
+pack = PackedStringArray("shade_hoplite", "shade_hoplite", "shade_swordsman", "shade_archer")
+activation_radius = 16.0
+spread = 3.5
+no_champion = true
+
+[node name="PackB" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -14)
+script = ExtResource("2_spawner")
+pack = PackedStringArray("shade_hoplite", "shade_archer", "shade_archer")
+level = 2
+
+[node name="Captain" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -18)
+script = ExtResource("2_spawner")
+pack = PackedStringArray("captain_lykos")
+level = 3
+no_champion = true

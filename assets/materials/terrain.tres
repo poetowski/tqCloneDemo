@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://src/shaders/terrain.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Terrain"
+shader = ExtResource("1_shader")
+shader_parameter/emission_energy = 4.0
+shader_parameter/variation = 0.08

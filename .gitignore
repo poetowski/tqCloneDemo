@@ -1,0 +1,30 @@
+# Godot cache and per-machine state (rebuilt by `npm run import`)
+.godot/
+/android/
+
+# Export output
+/build/
+
+# Dev output
+.shots/
+.godot-api/
+.perf/
+addons/godot_mcp/cache/
+
+# Node (the tooling has no dependencies, this is a safety net)
+node_modules/
+
+# Claude Code per-user settings
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Blender backups
+*.blend1
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store

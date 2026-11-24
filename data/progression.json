@@ -1,0 +1,4 @@
+{
+  "_doc": "Hero progression (docs/GAME_DESIGN.md#hero-stats). xp_curve: XP to go from level L to L+1 = round(base * L^exponent). Tuned so a hero who clears Elaion and turns in both quests reaches level 7 at the bronze bull (enemy XP is in data/enemies.json, scaled by 1 + 0.2 (L-1)).",
+  "xp_curve": {"base": 45, "exponent": 1.5}
+}

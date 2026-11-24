@@ -1,0 +1,27 @@
+{
+  "_doc": "Affixes: kind prefix | suffix; stat from src/core/stats.gd; flat or pct gives the roll range at item level 1 (rolls grow +8% per item level); slots it can appear on ('any' for all gear); weight: relative frequency.",
+  "affixes": [
+    {"id": "spartan", "name": "Spartan", "kind": "prefix", "stat": "armor", "pct": [10, 22], "slots": ["shield", "head", "chest", "legs"], "weight": 10},
+    {"id": "nemean", "name": "Nemean", "kind": "prefix", "stat": "max_health", "flat": [10, 24], "slots": ["any"], "weight": 10},
+    {"id": "keen", "name": "Keen", "kind": "prefix", "stat": "crit_chance", "flat": [2, 5], "slots": ["weapon", "ring", "amulet"], "weight": 7},
+    {"id": "swift", "name": "Swift", "kind": "prefix", "stat": "attack_speed", "pct": [6, 14], "slots": ["weapon", "ring"], "weight": 7},
+    {"id": "brazen", "name": "Brazen", "kind": "prefix", "stat": "damage_min", "flat": [2, 4], "slots": ["weapon"], "weight": 9, "also": {"stat": "damage_max", "mult": 1.6}},
+    {"id": "olympian", "name": "Olympian", "kind": "prefix", "stat": "all_attributes", "flat": [2, 4], "slots": ["ring", "amulet", "head"], "weight": 3},
+    {"id": "fiery", "name": "Hephaestan", "kind": "prefix", "stat": "fire_damage", "flat": [3, 7], "slots": ["weapon"], "weight": 5},
+    {"id": "gilded", "name": "Gilded", "kind": "prefix", "stat": "magic_find", "pct": [8, 18], "slots": ["ring", "amulet", "head"], "weight": 4},
+    {"id": "ichorous", "name": "Ichorous", "kind": "prefix", "stat": "max_ichor", "flat": [8, 18], "slots": ["any"], "weight": 7},
+    {"id": "of_ares", "name": "of Ares", "kind": "suffix", "stat": "damage_pct", "flat": [6, 14], "slots": ["weapon", "ring", "amulet"], "weight": 9},
+    {"id": "of_hermes", "name": "of Hermes", "kind": "suffix", "stat": "move_speed", "pct": [5, 10], "slots": ["legs", "amulet"], "weight": 6},
+    {"id": "of_the_owl", "name": "of the Owl", "kind": "suffix", "stat": "spirit", "flat": [3, 7], "slots": ["any"], "weight": 8},
+    {"id": "of_heracles", "name": "of Heracles", "kind": "suffix", "stat": "might", "flat": [3, 7], "slots": ["any"], "weight": 9},
+    {"id": "of_odysseus", "name": "of Odysseus", "kind": "suffix", "stat": "cunning", "flat": [3, 7], "slots": ["any"], "weight": 9},
+    {"id": "of_the_olive", "name": "of the Olive", "kind": "suffix", "stat": "health_regen", "flat": [0.5, 1.5], "slots": ["chest", "legs", "ring", "amulet", "shield"], "weight": 7},
+    {"id": "of_ichor", "name": "of Ichor", "kind": "suffix", "stat": "ichor_regen", "flat": [0.5, 1.4], "slots": ["head", "ring", "amulet"], "weight": 6},
+    {"id": "of_the_hydra", "name": "of the Hydra", "kind": "suffix", "stat": "life_on_hit", "flat": [1, 3], "slots": ["weapon", "ring"], "weight": 5},
+    {"id": "of_orpheus", "name": "of Orpheus", "kind": "suffix", "stat": "skill_damage_pct", "flat": [8, 16], "slots": ["weapon", "head", "amulet"], "weight": 6},
+    {"id": "of_the_tortoise", "name": "of the Tortoise", "kind": "suffix", "stat": "armor", "flat": [4, 10], "slots": ["shield", "chest", "legs"], "weight": 7},
+    {"id": "of_tyche", "name": "of Tyche", "kind": "suffix", "stat": "magic_find", "pct": [10, 20], "slots": ["ring", "amulet"], "weight": 3},
+    {"id": "of_achilles", "name": "of Achilles", "kind": "suffix", "stat": "crit_multiplier", "flat": [0.1, 0.25], "slots": ["weapon", "amulet"], "weight": 4},
+    {"id": "of_the_phalanx", "name": "of the Phalanx", "kind": "suffix", "stat": "max_health", "pct": [6, 12], "slots": ["shield", "chest"], "weight": 6}
+  ]
+}

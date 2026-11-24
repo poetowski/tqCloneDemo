@@ -1,0 +1,84 @@
+{
+  "_doc": "Enemy definitions (docs/GAME_DESIGN.md#enemies). Numbers are at level 1; src/actors/enemies/enemy.gd scales health by 1 + 0.28 (L-1) and damage by 1 + 0.18 (L-1). model: a .glb from tools/blender/characters; hide: mesh variants to hide; attach: item models per slot (data/attachments.json); ai: melee | ranged | charger | boss; attack.duration is seconds per swing at speed 1; loot: a table in data/items/loot_tables.json.",
+  "shade_hoplite": {
+    "name": "Unthreaded Hoplite",
+    "model": "res://assets/models/characters/shade/shade.glb",
+    "hide": ["Mantle"],
+    "attach": {"weapon": "dory_rusted", "shield": "aspis_rusted", "helmet": "helm_corinthian_rusted"},
+    "scale": 1.0, "radius": 0.42,
+    "health": 34, "damage": [5, 8], "armor": 5, "speed": 3.6,
+    "aggro": 13, "leash": 32, "xp": 20,
+    "ai": "melee",
+    "attack": {"anim": "attack_thrust", "range": 2.5, "duration": 1.05, "cooldown": 0.7},
+    "rises": true, "tags": ["unthreaded"], "loot": "trash"
+  },
+  "shade_swordsman": {
+    "name": "Unthreaded Hoplite",
+    "model": "res://assets/models/characters/shade/shade.glb",
+    "hide": ["Mantle", "Plate"],
+    "attach": {"weapon": "xiphos_rusted", "shield": "aspis_rusted", "helmet": "helm_corinthian_rusted"},
+    "scale": 0.97, "radius": 0.42,
+    "health": 30, "damage": [5, 7], "armor": 3, "speed": 3.9,
+    "aggro": 13, "leash": 32, "xp": 18,
+    "ai": "melee",
+    "attack": {"anim": "attack_slash", "range": 2.0, "duration": 0.95, "cooldown": 0.6},
+    "rises": true, "tags": ["unthreaded"], "loot": "trash"
+  },
+  "shade_archer": {
+    "name": "Unthreaded Archer",
+    "model": "res://assets/models/characters/shade_archer/shade_archer.glb",
+    "hide": [],
+    "attach": {"bow": "bow"},
+    "scale": 1.0, "radius": 0.4,
+    "health": 24, "damage": [4, 7], "armor": 0, "speed": 3.4,
+    "aggro": 17, "leash": 34, "xp": 22,
+    "ai": "ranged",
+    "attack": {"anim": "shoot", "range": 15.0, "keep_away": 8.0, "duration": 1.25, "cooldown": 1.1, "projectile": "arrow", "projectile_speed": 17.0},
+    "rises": true, "tags": ["unthreaded"], "loot": "trash"
+  },
+  "styx_boar": {
+    "name": "Styx-touched Boar",
+    "model": "res://assets/models/characters/boar/boar.glb",
+    "hide": [],
+    "attach": {},
+    "scale": 1.0, "radius": 0.55,
+    "health": 46, "damage": [7, 11], "armor": 8, "speed": 5.2,
+    "aggro": 11, "leash": 30, "xp": 25,
+    "ai": "charger",
+    "attack": {"anim": "gore", "range": 2.0, "duration": 0.9, "cooldown": 0.9},
+    "charge": {"min_range": 4.0, "max_range": 11.0, "windup": 0.9, "speed": 15.0, "distance": 12.0, "cooldown": 5.0, "damage_mult": 1.6},
+    "rises": false, "tags": ["beast"], "loot": "beast"
+  },
+  "captain_lykos": {
+    "name": "Captain Lykos the Unthreaded",
+    "model": "res://assets/models/characters/shade/shade.glb",
+    "hide": [],
+    "attach": {"weapon": "dory_gilded", "shield": "aspis_rusted", "helmet": "helm_corinthian_captain"},
+    "scale": 1.28, "radius": 0.55,
+    "health": 240, "damage": [9, 14], "armor": 18, "speed": 3.9,
+    "aggro": 15, "leash": 40, "xp": 180,
+    "ai": "melee",
+    "attack": {"anim": "attack_thrust", "range": 3.0, "duration": 1.0, "cooldown": 0.5},
+    "cleave": {"anim": "lash", "radius": 3.6, "every": 3, "duration": 1.2, "damage_mult": 1.3},
+    "rises": true, "unique": true, "tags": ["unthreaded", "captain"], "loot": "captain",
+    "line": "The line... holds."
+  },
+  "bronze_bull": {
+    "name": "Khalkotauros, the Bronze Bull",
+    "model": "res://assets/models/characters/bronze_bull/bronze_bull.glb",
+    "hide": [],
+    "attach": {},
+    "scale": 1.0, "radius": 1.5,
+    "health": 700, "damage": [8, 13], "armor": 20, "speed": 4.2,
+    "aggro": 22, "leash": 999, "xp": 650,
+    "ai": "boss",
+    "attack": {"anim": "gore", "range": 3.4, "duration": 1.3, "cooldown": 0.6},
+    "moves": {
+      "_doc": "Multipliers of the bull's damage roll and knockback speeds (m/s). breath_tick: fire per 0.22 s; breath_burn: burn per second after; breath_turn: how fast the fire cone sweeps after the hero (rad/s). mend_away / mend_watched: health fraction mended per second while it waits (the hero fell or left / the hero lingers beyond its reach). out_of_reach: seconds the hero may stay 3 m beyond the arena's edge.",
+      "gore_knock": 5.0, "trample_mult": 1.5, "trample_knock": 10.0, "quake_mult": 1.2, "quake_knock": 6.0,
+      "breath_tick": 0.25, "breath_burn": 0.3, "breath_turn": 0.6,
+      "mend_away": 0.01, "mend_watched": 0.06, "out_of_reach": 6.0
+    },
+    "rises": false, "boss": true, "tags": ["boss"], "loot": "boss"
+  }
+}

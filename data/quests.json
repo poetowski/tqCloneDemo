@@ -1,0 +1,27 @@
+{
+  "_doc": "Quests (docs/GAME_DESIGN.md#quests). Each stage has a goal: talk (npc), kill (tag or enemy id, count), item (picked up), flag (Game flag set). reward on a stage is given when that stage completes. next starts another quest when this one ends.",
+  "weaver": {
+    "title": "The Weaver of Elaion",
+    "stages": [
+      {"text": "Speak with old Klothia at her loom in Elaion.", "goal": {"type": "talk", "npc": "klotho"}},
+      {"text": "Sever the Unthreaded in the olive terraces", "goal": {"type": "kill", "tag": "unthreaded", "count": 10}},
+      {"text": "Return to Klothia in Elaion.", "goal": {"type": "talk", "npc": "klotho"}, "reward": {"xp": 160, "unique": "thread_woven_chiton"}}
+    ],
+    "next": "dead_walk"
+  },
+  "dead_walk": {
+    "title": "Where the Dead Walk",
+    "stages": [
+      {"text": "Climb the cypress road to the necropolis and destroy Captain Lykos.", "goal": {"type": "kill", "enemy": "captain_lykos", "count": 1}},
+      {"text": "Take the Seal of the Sanctuary to the gate above the necropolis.", "goal": {"type": "flag", "flag": "gate_open"}, "reward": {"xp": 220}}
+    ],
+    "next": "bronze_heart"
+  },
+  "bronze_heart": {
+    "title": "The Bronze Heart",
+    "stages": [
+      {"text": "Destroy Khalkotauros in the Sanctuary of the Moirai.", "goal": {"type": "kill", "enemy": "bronze_bull", "count": 1}},
+      {"text": "Claim the First Blade of Atropos.", "goal": {"type": "item", "item": "blade_of_atropos"}}
+    ]
+  }
+}

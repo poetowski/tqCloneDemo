@@ -1,0 +1,24 @@
+{
+  "_doc": "What the people of Elaion say (docs/LORE.md: short sentences, sun and salt, no modern idioms). src/world/npc.gd picks lines by quest state.",
+  "klotho": {
+    "name": "Old Klothia",
+    "intro": "There you are. Sit, child, you're dripping sand on my wool.\n\nYou died on the beach this morning. I felt the cut go halfway through your thread, and then... nothing. No one is holding your end any more.",
+    "who": "A weaver. Old as the hills, older than some. The village calls me Klothia and brings me figs. I let them.",
+    "what": "Someone has stolen the shears that end every life. A thread can't be cut now, so nothing can die. The dead who should have gone down to Hades are climbing back out of the earth instead.\n\nYou were halfway gone when the shears vanished. Half a cut. It's left you loose. Fate can't steer you, and a blade in your hand can do what no other can: it severs.",
+    "unthreaded": "The war dead from the siege, mostly. They sleep in the old necropolis above the terraces. Now they walk the olive rows and frighten Dion's goats.\n\nThey can't die, but your blade can cut their threads. What you cut stays cut.",
+    "task": "Go up to the olive terraces and sever ten of them. Feel the thread go slack in your hand, then come back and tell me how it felt.",
+    "progress": "The thread is pulling. Go on, the terraces are east of the well.",
+    "reward": "Ten threads cut, and you still have all your fingers. Good.\n\nTake this. I wove it while you were gone. There's a little gold in the linen, and it'll keep you from bleeding out too quickly.\n\nNow listen. The shears were broken into three blades and hidden. One of them is here, in Elaion, up at the old Sanctuary of the Moirai. Its gate is sealed. Captain Lykos holds the seal. He held the line at the siege three hundred years ago and he still won't let go. You'll find him in the necropolis.",
+    "lykos": "Lykos keeps his post at the tholos tomb, east of the necropolis. Bring me back the seal... no, keep it. Take it to the gate above the graves.",
+    "bull": "Something burns up there behind the gate. Hephaestus made the Fates a bull of bronze to guard their forge. Someone has wound a stolen thread into its heart, so it won't stop. Cut the thread, child. Cut it.",
+    "done": "One blade of three. I can feel it singing from here.\n\nThe thread runs on, child. So do you."
+  },
+  "dion": {
+    "name": "Dion the fisherman",
+    "intro": "You! You were lying on the sand this morning, dead as a mackerel. I covered you with a sail and went to fetch the priest, and when I came back you'd gone.\n\nGods. Nothing stays dead any more. My brother drowned last winter. He came up the beach on the new moon.",
+    "brother": "He just stood in the surf looking at the house. Eyes like the sea at night, that green-blue glow. My wife won't open the shutters.",
+    "gift": "Here, take these. My wife made them for the boat. Honey, poppy and a prayer. You'll need them more than I do.",
+    "later": "Old Klothia's always at her loom, north of the well. She knows things she shouldn't. Ask her.",
+    "after_bull": "The hill was glowing all night like a forge. And this morning my brother was gone from the surf. Was that you? Thank you. I think."
+  }
+}

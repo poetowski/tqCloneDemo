@@ -1,0 +1,23 @@
+{
+  "_doc": "Mythic items: a fixed base, fixed modifiers (stat, flat, pct) and a lore line. model overrides the base model (on the ground and on the hero).",
+  "ember_of_hephaestus": {
+    "name": "Ember of Hephaestus", "base": "kopis", "model": "kopis_ember", "level": 6,
+    "mods": [["damage_pct", 30, 0], ["fire_damage", 12, 0], ["attack_speed", 0, 10], ["might", 6, 0]],
+    "lore": "Still warm from the forge that birthed the bull."
+  },
+  "gorgoneion_of_elaion": {
+    "name": "Gorgoneion of Elaion", "base": "owl_pendant", "level": 3,
+    "mods": [["max_health", 30, 0], ["armor", 0, 15], ["spirit", 5, 0], ["health_regen", 1.5, 0]],
+    "lore": "The village's old ward: Medusa's face, stern enough to turn back the dead."
+  },
+  "thread_woven_chiton": {
+    "name": "Thread-Woven Chiton", "base": "linothorax", "level": 2,
+    "mods": [["armor", 14, 0], ["ichor_regen", 1.5, 0], ["skill_damage_pct", 15, 0], ["max_ichor", 15, 0]],
+    "lore": "Klotho wove gold into the linen. It pulls a little toward your heart."
+  },
+  "spear_of_the_unbroken_line": {
+    "name": "Spear of the Unbroken Line", "base": "dory", "model": "dory_gilded", "level": 4,
+    "mods": [["damage_min", 5, 0], ["damage_max", 9, 0], ["crit_chance", 6, 0], ["life_on_hit", 3, 0]],
+    "lore": "Captain Lykos held the line for three hundred years. You may let go."
+  }
+}

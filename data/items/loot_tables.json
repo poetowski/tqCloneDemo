@@ -1,0 +1,10 @@
+{
+  "_doc": "Loot tables. item_chance: chance of each roll to drop gear; rolls: how many rolls; rarity: weights for Mortal, Blessed, Heroic, Mythic (magic find shifts weight from Mortal); min_rarity: floor for guaranteed drops; gold: [chance, min, max] scaled by level; potion: chance of a potion; unique: a mythic always dropped.",
+  "trash": {"rolls": 1, "item_chance": 0.3, "rarity": [70, 24, 5.5, 0.5], "gold": [0.35, 3, 9], "potion": 0.2},
+  "beast": {"rolls": 1, "item_chance": 0.22, "rarity": [70, 24, 5.5, 0.5], "gold": [0.2, 2, 6], "potion": 0.26},
+  "champion": {"rolls": 2, "item_chance": 1.0, "min_rarity": 1, "rarity": [0, 70, 26, 4], "gold": [1.0, 15, 30], "potion": 0.5},
+  "captain": {"rolls": 3, "item_chance": 1.0, "min_rarity": 1, "rarity": [0, 55, 40, 5], "gold": [1.0, 40, 70], "potion": 1.0, "quest_item": "seal_of_sanctuary", "unique_chance": [0.5, "spear_of_the_unbroken_line"]},
+  "boss": {"rolls": 4, "item_chance": 1.0, "min_rarity": 1, "rarity": [0, 40, 50, 10], "gold": [1.0, 150, 220], "potion": 1.0, "unique": "ember_of_hephaestus", "quest_item": "blade_of_atropos"},
+  "amphora": {"rolls": 1, "item_chance": 0.12, "rarity": [80, 18, 2, 0], "gold": [0.55, 2, 7], "potion": 0.3},
+  "chest": {"rolls": 2, "item_chance": 0.85, "min_rarity": 0, "rarity": [45, 42, 12, 1], "gold": [1.0, 20, 45], "potion": 0.7}
+}

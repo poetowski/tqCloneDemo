@@ -1,0 +1,28 @@
+{
+  "name": "unthreaded",
+  "private": true,
+  "description": "Dev commands for UNTHREADED, a Greek-myth action RPG vertical slice in Godot. No dependencies; see tools/dev.mjs.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "editor": "node tools/dev.mjs editor",
+    "game": "node tools/dev.mjs game",
+    "import": "node tools/dev.mjs import",
+    "models": "node tools/dev.mjs models",
+    "icons": "node tools/dev.mjs icons",
+    "audio": "node tools/dev.mjs audio",
+    "assets": "node tools/dev.mjs assets",
+    "level": "node tools/dev.mjs level",
+    "render": "node tools/dev.mjs render",
+    "blender": "node tools/dev.mjs blender",
+    "check": "node tools/dev.mjs check",
+    "test": "node tools/dev.mjs test",
+    "verify": "node tools/dev.mjs check && node tools/dev.mjs test",
+    "shot": "node tools/dev.mjs shot",
+    "tour": "node tools/dev.mjs tour",
+    "api": "node tools/dev.mjs api",
+    "where": "node tools/dev.mjs where"
+  }
+}
