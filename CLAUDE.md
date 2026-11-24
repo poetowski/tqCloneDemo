@@ -13,6 +13,10 @@ Read before working:
 - [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md): how Blender scripts become game assets
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): code structure, systems, data files
 - [docs/ROADMAP.md](docs/ROADMAP.md): what's done, what's next, known issues
+- [docs/WORLD.md](docs/WORLD.md): the laws of the world and the shape of the whole game
+- [docs/CANON.md](docs/CANON.md): every name in the world (checked), and names that aren't ours
+- [docs/EXPANSION.md](docs/EXPANSION.md): recipes for new enemies, items, people, quests, zones
+- [docs/DECISIONS.md](docs/DECISIONS.md): why things are as they are; read before changing one
 
 ## Rules
 
@@ -21,6 +25,11 @@ Read before working:
   marketplace or AI-service assets, whatever their license. Inspiration only.
 - **Original names only.** Never reuse place, character or item names from Titan Quest,
   Grim Dawn or Diablo (the village is *Elaion*, not Helos). Greek myth itself is fine.
+  Every player-visible name is registered in `docs/CANON.md` before it is used
+  (`npm run canon` fails otherwise).
+- **The world's laws** (`docs/WORLD.md`) bind all new content: only the hero's kills
+  stay dead, gods stay hidden, the age is bronze. Changing a law or an earlier decision
+  takes a new entry in `docs/DECISIONS.md`. Adding content: follow `docs/EXPANSION.md`.
 - **The palette is the law** (`data/palette.json`, 64 swatches): models map faces onto
   swatches; no free colours. Add a swatch only for a genuinely new material, at the end.
 - Gold = fate/hero/loot, teal = death/Styx, red-orange = enemy telegraphs, fire = Hephaestus.
@@ -37,9 +46,10 @@ Read before working:
 | `npm run assets` | All of the above, in order. |
 | `npm run level` | Rebuilds `src/world/elaion/elaion.tscn` from `data/level/elaion_layout.json` (run `npm run models -- elaion` first if the layout changed). Bakes the navmesh. |
 | `npm run render -- <slug> [--anim=run --frames=0,4,8] [--attach=dory:weapon] [--hide=Mesh]` | Blender preview of a model into `.shots/models/`. Read the PNG. |
+| `npm run canon` | Names in the data registered in `docs/CANON.md`, no "not ours" names anywhere, no broken doc links. No engine; a second. |
 | `npm run check` | Import, then load every script/scene/resource; fails on errors. |
 | `npm test` | GUT tests headless (`tests/`). |
-| `npm run verify` | check + test. |
+| `npm run verify` | canon + check + test. |
 | `npm run shot -- [scene] [--scenario=fight\|brawl\|panels\|loom\|hero] [--camera=x,y,z --look=x,y,z] [--frames=90]` | Plays a scene in a window, saves `.shots/<name>.png`, quits, and prints every actor's state. |
 | `npm run tour [-- --minutes=12 --speed=3 --scenario=tour\|playthrough\|paths]` | Headless automated play-through of the whole zone; prints quests, kills, deaths, stuck spots; fails unless the demo is completed. `tour`: a strong hero (does it work?); `playthrough`: a level-1 hero who levels and equips like a player (is it fair?); `paths`: navmesh check (route links, islands, nothing under the sea). |
 | `npm run game [-- scene]` | Plays (title screen by default). Blocks: run it in the background. |
@@ -58,6 +68,8 @@ Binaries are pinned in `tools/dev.mjs` (`%LOCALAPPDATA%\Programs\Godot\4.7.2\`,
 3. Gameplay changes keep `npm run tour` completing the demo.
 4. New logic gets a GUT test in `tests/unit/`.
 5. `docs/ROADMAP.md` is updated: what changed, what's next.
+6. New names are in `docs/CANON.md` (status *canon* once built); a changed rule has its
+   `docs/DECISIONS.md` entry; new content passed the review list in `docs/EXPANSION.md`.
 
 ## MCP servers (`.mcp.json`)
 

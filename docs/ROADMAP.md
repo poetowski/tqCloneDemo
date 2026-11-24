@@ -87,3 +87,8 @@ The vertical slice's plan and state. Update this at the end of every working ses
   +32%. Navmesh flood fill compares heights (a temple top no longer counts as reached
   ground); actors set back on the ground land on its surface, not the navmesh's height.
   Fixed: a hovered item or foe freed under the cursor threw errors on every click.
+- **2026-11-24 (world)** — A mechanism for growing the world consistently:
+  [WORLD.md](WORLD.md) (the laws, the three acts, the zone template),
+  [CANON.md](CANON.md) (every name, plus names that aren't ours),
+  [EXPANSION.md](EXPANSION.md) (recipes and a review list), [DECISIONS.md](DECISIONS.md)
+  (D1–D11). `npm run canon` checks names and doc links and runs first in `npm run verify`.

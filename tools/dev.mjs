@@ -14,6 +14,8 @@
 //                                 layout data (tools/build_level.gd)
 //   npm run render -- <glb|slug>  Blender preview render of a model into .shots/models/
 //   npm run blender               open Blender with the MCP add-on (port 9876)
+//   npm run canon                 every name registered in docs/CANON.md, none of
+//                                 the "not ours" names anywhere, no broken doc links
 //   npm run check                 import, then load every script/scene/resource
 //   npm test [-- <gut args>]      run the GUT suite headless (-gselect=test_stats)
 //   npm run shot [-- <scene>] [--out=x.png] [--frames=90] [--size=1280x720]
@@ -28,6 +30,7 @@ import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, rmSync, statSync, utimesSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkCanon } from './canon.mjs';
 
 const GODOT_VERSION = '4.7.2';
 const BLENDER_VERSION = '5.2.3';
@@ -295,6 +298,11 @@ const commands = {
     spawn(blenderBinary(), [], { detached: true, stdio: 'ignore', env }).unref();
     console.log('[dev] Blender starting; the MCP add-on listens on localhost:9876');
     return true;
+  },
+
+  // Names, "not ours" names and doc links (tools/canon.mjs, docs/CANON.md).
+  canon() {
+    return checkCanon(ROOT);
   },
 
   async check() {
