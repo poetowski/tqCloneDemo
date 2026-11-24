@@ -1,0 +1,21 @@
+{
+  "_doc": "Area moods (docs/ART_BIBLE.md#lighting). Each zone in a level script names its mood (tools/blender/level/*.py, zone things); src/world/atmosphere.gd blends the haze, grading, sun, weather shader globals and drifting motes to it over `blend` seconds. Colours are sRGB hex. motes: pollen | dust | wisps (Styx teal) | embers (fire); amount is how many float around the hero.",
+  "blend": 3.5,
+  "start": "shore",
+  "moods": {
+    "shore": {"fog": "#E4D6C0", "fog_density": 0.0026, "saturation": 1.12, "contrast": 1.04, "ambient": 0.72,
+      "sun": "#FFE0B0", "sun_energy": 1.5, "wind": 1.3, "clouds": 0.35, "motes": "dust", "mote_amount": 24},
+    "village": {"fog": "#E8D2B0", "fog_density": 0.0022, "saturation": 1.16, "contrast": 1.05, "ambient": 0.72,
+      "sun": "#FFDEAA", "sun_energy": 1.5, "wind": 0.9, "clouds": 0.35, "motes": "pollen", "mote_amount": 40},
+    "terraces": {"fog": "#E6C898", "fog_density": 0.003, "saturation": 1.18, "contrast": 1.06, "ambient": 0.68,
+      "sun": "#FFD49A", "sun_energy": 1.45, "wind": 1.0, "clouds": 0.55, "motes": "pollen", "mote_amount": 70},
+    "road": {"fog": "#DCC7A6", "fog_density": 0.0028, "saturation": 1.1, "contrast": 1.05, "ambient": 0.7,
+      "sun": "#FFDBA8", "sun_energy": 1.45, "wind": 1.1, "clouds": 0.45, "motes": "dust", "mote_amount": 30},
+    "necropolis": {"fog": "#8FA6A0", "fog_density": 0.0062, "saturation": 0.82, "contrast": 1.08, "ambient": 0.6,
+      "sun": "#D8D0C0", "sun_energy": 1.15, "wind": 0.6, "clouds": 0.7, "motes": "wisps", "mote_amount": 46},
+    "sanctuary": {"fog": "#D9A27A", "fog_density": 0.0035, "saturation": 1.08, "contrast": 1.08, "ambient": 0.6,
+      "sun": "#FFB070", "sun_energy": 1.25, "wind": 0.8, "clouds": 0.3, "motes": "embers", "mote_amount": 24},
+    "arena": {"fog": "#C98A5E", "fog_density": 0.004, "saturation": 1.05, "contrast": 1.1, "ambient": 0.55,
+      "sun": "#FF9F5A", "sun_energy": 1.15, "wind": 0.7, "clouds": 0.25, "motes": "embers", "mote_amount": 60}
+  }
+}

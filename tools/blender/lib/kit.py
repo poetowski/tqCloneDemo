@@ -182,8 +182,10 @@ def flat_material(name, swatch, alpha=1.0, emission=0.0):
 
 
 def get_material(name):
-    if name == "Palette":
-        return palette_material()
+    # "Foliage" is the palette with wind in the game (plants sway); in Blender it
+    # renders exactly like the palette.
+    if name in ("Palette", "Foliage"):
+        return palette_material(name)
     mat = bpy.data.materials.get(name)
     if mat is None:
         raise KeyError(f"material '{name}' was never made; call flat_material() first")
@@ -257,6 +259,8 @@ class Mesh:
         self.bones = list(bones) if bones else []
         self.deform = self.bm.verts.layers.deform.verify() if self.bones else None
         self.materials = []
+        # The material parts get unless they name one: "Foliage" for plants.
+        self.material = "Palette"
         self.stack = [Matrix.Identity(4)]
 
     # placement
@@ -286,8 +290,9 @@ class Mesh:
             return weigh
         return weigh(co)
 
-    def paint(self, verts, swatch, weigh=None, smooth=False, material="Palette", faces=None, double=False):
+    def paint(self, verts, swatch, weigh=None, smooth=False, material=None, faces=None, double=False):
         """Colours, weights and shades the faces of freshly made `verts`."""
+        material = material or self.material
         if faces is None:
             faces = set()
             for vert in verts:

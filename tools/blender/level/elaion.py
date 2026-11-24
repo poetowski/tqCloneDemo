@@ -332,6 +332,11 @@ def plan(L):
     for x, z in ((-60, 60), (-72, 40), (-58, 66), (-75, 55)):
         L.prop("rock_medium", x, z, r=1.0)
     L.thing("shrine", -61, 62, id="hearth_village", r=2.0, name="Hearth of Hestia")
+    # The shore: nets drying by the boats, driftwood at the tide line, gulls over the bay.
+    L.prop("fishing_nets", -73, 47, rot=105, r=2.0, group="Village")
+    for x, z, rot in ((-77, 52, 20), (-76, 58, 140), (-74, 43, 75)):
+        L.prop("driftwood", x, z, rot=rot, r=0, group="Village", sink=0.08)
+    L.thing("birds", -90, 44, species="gull", count=6, radius=20.0, height=12.0)
     houses = [(-46, 28, 15), (-32, 29, -10), (-27, 44, 95), (-38, 52, 180), (-52, 48, 200), (-24, 34, 80)]
     for k, (x, z, rot) in enumerate(houses):
         L.prop("house_a" if k % 2 == 0 else "house_b", x, z, rot=rot, r=4.5, group="Village")
@@ -354,10 +359,17 @@ def plan(L):
         L.prop(rng.choice(["cypress_a", "cypress_b"]), x, z, r=0.9, group="Village")
     for x, z in ((-33, 37), (-46, 42), (-26, 39)):
         L.prop("bush_oleander", x, z, r=0.8, group="Village")
-    L.thing("zone", -42, 38, name="Elaion", subtitle="An olive village above the wine-dark sea", radius=24.0, music="village", ambience="shore")
+    for x, z in ((-57, 33), (-33, 21), (-20, 46), (-58, 55), (-45, 6)):
+        if L.free(x, z, 2.6) and not on_path(x, z, 1.5):
+            L.prop("fig_tree", x, z, r=2.4, group="Village", scale=rng.uniform(0.9, 1.1))
+    # Smoke from the hearths of three houses (Klotho's among them).
+    for x, z in ((-46, 28), (-38, 52), (-51, 11)):
+        L.thing("smoke", x, z, height=4.3)
+    L.thing("zone", -42, 38, name="Elaion", subtitle="An olive village above the wine-dark sea", radius=24.0, music="village", ambience="shore",
+            mood="village")
 
     # --- Olive terraces -------------------------------------------------------------------
-    L.thing("zone", 12, 42, name="The Olive Terraces", subtitle="", radius=26.0, music="field", ambience="cicadas")
+    L.thing("zone", 12, 42, name="The Olive Terraces", subtitle="", radius=26.0, music="field", ambience="cicadas", mood="terraces")
     # Dry-stone walls at the foot of each bank: a segment, then two segments' gap
     # (staggered from terrace to terrace), so the banks can be climbed anywhere.
     for level in range(1, 6):
@@ -392,7 +404,7 @@ def plan(L):
         L.thing("spawner", x, z, pack=pack, level=level, radius=15.0)
 
     # --- Cypress road ----------------------------------------------------------------------
-    L.thing("zone", 52, -4, name="The Cypress Road", subtitle="", radius=12.0, music="field", ambience="wind")
+    L.thing("zone", 52, -4, name="The Cypress Road", subtitle="", radius=12.0, music="field", ambience="wind", mood="road")
     # Cypress rows on both sides of the road, never on it.
     for a_name, b_name in (("terrace_top", "road_a"), ("road_a", "road_b"), ("road_b", "necropolis")):
         ax, az = ZONES[a_name][0], ZONES[a_name][1]
@@ -407,11 +419,25 @@ def plan(L):
                 if L.free(px, pz, 1.0) and not on_path(px, pz, 0.8) and L.h(px, pz) > 1.0:
                     L.prop(rng.choice(["cypress_a", "cypress_b"]), px, pz, r=1.0, group="Road", scale=rng.uniform(0.9, 1.1))
     L.prop("stele_a", 49, 2, rot=90, r=0.6, group="Road")
+    # Herms, Hermes' pillars, mark the road as they marked every road in Hellas.
+    for x, z, rot in ((47.6, 9.0, 80), (57.6, -13.0, 260), (45.0, -21.5, 60)):
+        if L.free(x, z, 1.0) and not on_path(x, z, 0.6):
+            L.prop("herm", x, z, rot=rot, r=0.8, group="Road")
     L.thing("spawner", 53, -10, pack=["shade_archer", "shade_archer", "shade_hoplite"], level=3, radius=16.0)
 
     # --- Necropolis -------------------------------------------------------------------------
     L.thing("zone", 30, -42, name="Necropolis of the Forgotten Siege", subtitle="Where the dead walk", radius=22.0, music="necropolis",
-            ambience="necropolis", fog=True)
+            ambience="necropolis", fog=True, mood="necropolis")
+    # The siege's arms still standing in the earth; crows wheeling over the graves.
+    placed = 0
+    for i in range(60):
+        if placed >= 7:
+            break
+        x, z = rng.uniform(12, 50), rng.uniform(-58, -28)
+        if walkable(x, z) and L.free(x, z, 1.4) and not on_path(x, z, 1.0):
+            L.prop("battle_debris_a" if placed % 2 else "battle_debris_b", x, z, r=1.2, group="Necropolis", sink=0.02)
+            placed += 1
+    L.thing("birds", 32, -44, species="crow", count=7, radius=16.0, height=11.0)
     L.thing("shrine", 42, -26, id="hearth_necropolis", r=2.0, name="Hearth of Hestia")
     L.prop("tholos", 60, -67, rot=150, r=6.5, group="Necropolis", sink=0.2)
     for row in range(5):
@@ -449,10 +475,15 @@ def plan(L):
         z = -83 + (-96 - -83) * t
         for side in (-1, 1):
             L.prop("column" if (k + side) % 3 else "column_broken", x + side * 6.0, z, rot=0, r=0.9, group="Sanctuary")
-    L.thing("zone", 7, -86, name="Sanctuary of the Moirai", subtitle="", radius=12.0, music="sanctuary", ambience="wind")
+    L.thing("zone", 7, -86, name="Sanctuary of the Moirai", subtitle="", radius=12.0, music="sanctuary", ambience="wind", mood="sanctuary")
     L.prop("temple_ruin", -9, -88, rot=90, r=0, group="Sanctuary")
     for k, (model, x) in enumerate((("moira_klotho", 2.0), ("moira_lachesis", 7.0), ("moira_atropos", 12.0))):
-        L.prop(model, x, -93.5 + (1.0 if k == 1 else 0.0), rot=0, r=1.2, group="Sanctuary")
+        z = -93.5 + (1.0 if k == 1 else 0.0)
+        L.prop(model, x, z, rot=0, r=1.2, group="Sanctuary")
+        L.prop("votives", x, z + 1.6, rot=rng.uniform(-20, 20), r=0, group="Sanctuary", sink=0.0)
+    # Acanthus, the leaf of the Corinthian capital, grows out of the ruins.
+    for x, z in ((-4, -83), (-4.5, -92), (-13, -82.5), (-14, -93), (1, -77.5), (16, -82), (-2, -95.5), (14.5, -95)):
+        L.scatter_point("acanthus", x, z, rng.uniform(0.9, 1.3))
     for x, z in ((0, -80), (14, -84)):
         L.thing("brazier", x, z, r=0.6)
     # A last hearth before the bull: a fallen hero wakes in the court, not back in
@@ -471,10 +502,11 @@ def plan(L):
         L.thing("brazier", 4 + math.cos(a) * 17.5, -107 + math.sin(a) * 17.5, r=0.6)
     # The bull fights inside the column ring (centre 4, -107; columns at 13.5 m).
     L.thing("boss", 4, -112, id="bronze_bull", level=7, arena=[4, -107], arena_radius=15.0, rot=0.0)
-    L.thing("zone", 4, -105, name="Khalkotauros", subtitle="The Bronze Bull of Hephaestus", radius=13.0, music="boss", ambience="forge", boss=True)
+    L.thing("zone", 4, -105, name="Khalkotauros", subtitle="The Bronze Bull of Hephaestus", radius=13.0, music="boss", ambience="forge", boss=True,
+            mood="arena")
 
     # --- the land around: trees and rocks on the slopes ------------------------------------------
-    for i in range(900):
+    for i in range(1300):
         x = rng.uniform(X0 + 8, X1 - 8)
         z = rng.uniform(Z0 + 8, Z1 - 8)
         d = features(x, z)[0]
@@ -484,16 +516,18 @@ def plan(L):
         roll = rng.random()
         if d > 14 and roll < 0.25:
             continue
-        if roll < 0.25:
+        if roll < 0.22:
             L.prop(rng.choice(["rock_large", "rock_cliff", "rock_medium"]), x, z, r=2.5, group="Wilds", scale=rng.uniform(0.8, 1.4), sink=0.4)
-        elif roll < 0.55:
+        elif roll < 0.47:
             L.prop(rng.choice(["olive_tree_a", "olive_tree_b", "olive_tree_c"]), x, z, r=2.2, group="Wilds", scale=rng.uniform(0.8, 1.2))
-        elif roll < 0.7:
+        elif roll < 0.6:
             L.prop(rng.choice(["cypress_a", "cypress_b"]), x, z, r=1.0, group="Wilds")
-        elif roll < 0.78:
+        elif roll < 0.66:
             L.prop("umbrella_pine", x, z, r=3.0, group="Wilds", scale=rng.uniform(0.85, 1.15))
+        elif roll < 0.76:
+            L.prop(rng.choice(["aleppo_pine_a", "aleppo_pine_b"]), x, z, r=2.4, group="Wilds", scale=rng.uniform(0.85, 1.2))
         else:
-            L.prop(rng.choice(["bush_myrtle", "bush_dry", "bush_oleander"]), x, z, r=0.8, group="Wilds", sink=0.1)
+            L.prop(rng.choice(["bush_myrtle", "bush_dry", "bush_oleander", "bush_broom"]), x, z, r=0.8, group="Wilds", sink=0.1)
     # Rocks inside the walkable areas' edges, for silhouette.
     for i in range(160):
         x = rng.uniform(-75, 70)
@@ -502,22 +536,46 @@ def plan(L):
         if -1.0 < d < 3.0 and L.free(x, z, 1.0) and L.h(x, z) > 0.8:
             L.prop(rng.choice(["rock_small", "rock_medium", "bush_dry", "bush_myrtle"]), x, z, r=0.8, group="Edges", sink=0.15)
 
-    # --- grass and flowers ------------------------------------------------------------------
-    for i in range(16000):
+    # --- the shore: reeds where land meets water, pebbles and dry grass above them ------------
+    for i in range(3000):
+        x = rng.uniform(-105, -38)
+        z = rng.uniform(-25, 90)
+        h = L.h(x, z)
+        if not 0.15 < h < 1.3 or not L.free(x, z, 0.5):
+            continue
+        if h < 0.7:
+            L.scatter_point("reeds" if rng.random() < 0.7 else "pebbles", x, z, rng.uniform(0.8, 1.2))
+        elif rng.random() < 0.5:
+            L.scatter_point(rng.choice(["pebbles", "grass_dry", "thyme"]), x, z, rng.uniform(0.8, 1.2))
+
+    # --- grass, flowers and undergrowth --------------------------------------------------------
+    for i in range(26000):
         x = rng.uniform(-90, 80)
         z = rng.uniform(-125, 85)
         d, walk, kind, path_kind = features(x, z)
         h = L.h(x, z)
-        if h < 1.6 or path_kind and d < -1.0 or kind in ("sanctuary", "arena") and d < 0:
+        if h < 1.6 or kind in ("sanctuary", "arena") and d < 0:
             continue
         if not L.free(x, z, 0.4):
             continue
+        if path_kind and d < -1.0:
+            # The worn middle of a path stays bare; its edges gather pebbles.
+            if d > -1.8 and rng.random() < 0.35:
+                L.scatter_point("pebbles", x, z, rng.uniform(0.7, 1.1))
+            continue
         if kind == "necropolis" and d < 2:
-            L.scatter_point("asphodel" if rng.random() < 0.55 else "grass_dry", x, z, rng.uniform(0.8, 1.3))
+            L.scatter_point(rng.choice(["asphodel", "asphodel", "grass_dry", "grass_tall"]), x, z, rng.uniform(0.8, 1.3))
         elif kind == "terraces" and d < 0:
-            L.scatter_point(rng.choice(["grass_green", "grass_green", "grass_poppy", "grass_dry"]), x, z, rng.uniform(0.8, 1.3))
-        elif d < 8:
-            L.scatter_point(rng.choice(["grass_dry", "grass_dry", "grass_green", "grass_daisy"]), x, z, rng.uniform(0.8, 1.4))
+            L.scatter_point(rng.choice(["grass_green", "grass_green", "grass_poppy", "grass_dry", "clover", "wildflowers"]), x, z,
+                            rng.uniform(0.8, 1.3))
+        elif kind in ("village", "coast") and d < 1:
+            L.scatter_point(rng.choice(["grass_green", "grass_dry", "clover", "thyme", "wildflowers"]), x, z, rng.uniform(0.8, 1.3))
+        elif d < 2:
+            L.scatter_point(rng.choice(["grass_dry", "grass_dry", "grass_green", "grass_daisy", "grass_tall", "thyme"]), x, z,
+                            rng.uniform(0.8, 1.4))
+        elif d < 9:
+            L.scatter_point(rng.choice(["grass_dry", "grass_tall", "grass_tall", "thyme", "bush_broom", "grass_daisy"]), x, z,
+                            rng.uniform(0.8, 1.4))
 
     # --- a route through the level for automated play-throughs -------------------------------------
     route = []
@@ -562,6 +620,121 @@ def write_map(L, route, nx, nz):
     return out
 
 
+MINIMAP_WIDTH = 1024
+# Things the game draws with a model of its own (Godot loads it in place of the mark).
+THING_MODELS = {"shrine": "hearth_of_hestia", "chest": "chest", "gate": "sanctuary_gate", "brazier": "brazier"}
+
+
+def render_minimap(L):
+    """The level from straight above for the in-game minimap and full map: the ground
+    and every prop in their palette colours, lit by the low western sun so the hills
+    read. Written to assets/ui/minimap/elaion.png, covering X0..X1 (left to right) by
+    Z0..Z1 (top to bottom, north up)."""
+    from mathutils import Matrix
+    scene = bpy.context.scene
+    # The ground and the sea are in the scene already: give them materials that render.
+    terrain = bpy.data.objects["Terrain-col"]
+    ground = terrain.data.materials[0]
+    ground.use_nodes = True
+    nodes, links = ground.node_tree.nodes, ground.node_tree.links
+    bsdf = nodes.get("Principled BSDF")
+    colour = nodes.new("ShaderNodeVertexColor")
+    colour.layer_name = "Color"
+    # Where you can walk stays bright; the wild land around falls back, so paths and
+    # places read at a glance. (The terrain is exported already: darkening its colours
+    # here touches only this picture.)
+    mesh = terrain.data
+    shade = [1.0 - 0.75 * kit.smoothstep(0.0, 4.0, features(v.co.x, -v.co.y)[0]) for v in mesh.vertices]
+    attr = mesh.color_attributes["Color"]
+    if attr.domain == "CORNER":
+        for loop in mesh.loops:
+            c = attr.data[loop.index].color
+            s = shade[loop.vertex_index]
+            attr.data[loop.index].color = (c[0] * s, c[1] * s, c[2] * s, c[3])
+    else:
+        for i, s in enumerate(shade):
+            c = attr.data[i].color
+            attr.data[i].color = (c[0] * s, c[1] * s, c[2] * s, c[3])
+    mesh.update()  # or the render draws the copy evaluated for the export
+    links.new(colour.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 1.0
+    water = bpy.data.objects["Sea"].data.materials[0]
+    water.use_nodes = True
+    wbsdf = water.node_tree.nodes.get("Principled BSDF")
+    wbsdf.inputs["Base Color"].default_value = (0.014, 0.11, 0.26, 1.0)
+    wbsdf.inputs["Roughness"].default_value = 0.35
+    # Every prop: each model imported once, its parts stamped at every placement.
+    palette = kit.palette_material("Palette")
+    templates = {}
+    for item in L.items:
+        slug = item.get("model") if item["type"] in ("prop", "breakable") else THING_MODELS.get(item["type"])
+        if not slug:
+            continue
+        if slug not in templates:
+            path = kit.model_path("props", slug)
+            if not os.path.exists(path):
+                path = kit.model_path("items", slug)
+            if not os.path.exists(path):
+                templates[slug] = []
+                continue
+            before, materials = set(bpy.data.objects), set(bpy.data.materials)
+            bpy.ops.import_scene.gltf(filepath=path)
+            for m in set(bpy.data.materials) - materials:
+                m.name = "Imported_" + m.name
+            parts = []
+            for obj in set(bpy.data.objects) - before:
+                if obj.type == "MESH" and "col" not in obj.name.lower():
+                    for i, m in enumerate(obj.data.materials):
+                        if m and m.name.startswith(("Imported_Palette", "Imported_Foliage")):
+                            obj.data.materials[i] = palette
+                    parts.append((obj.data, obj.matrix_world.copy()))
+                obj.hide_render = True  # the template itself stays at the origin, unseen
+            templates[slug] = parts
+        x, y, z = item["pos"]
+        place = (Matrix.Translation((x, -z, y)) @ Matrix.Rotation(math.radians(item.get("rot", 0.0)), 4, "Z")
+                 @ Matrix.Scale(item.get("scale", 1.0), 4))
+        for data, local in templates[slug]:
+            obj = bpy.data.objects.new(slug, data)
+            obj.matrix_world = place @ local
+            scene.collection.objects.link(obj)
+    # The golden-hour sun from the west-south-west, a cool sky to fill the shade.
+    sun_data = bpy.data.lights.new("MapSun", "SUN")
+    sun_data.energy = 4.2
+    sun_data.color = (1.0, 0.9, 0.78)
+    sun_data.angle = math.radians(3.0)
+    sun = bpy.data.objects.new("MapSun", sun_data)
+    sun.rotation_euler = (math.radians(52), 0.0, math.radians(-67.5))
+    scene.collection.objects.link(sun)
+    world = bpy.data.worlds.new("MapSky")
+    world.use_nodes = True
+    world.node_tree.nodes["Background"].inputs["Color"].default_value = (0.32, 0.38, 0.5, 1.0)
+    world.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.7
+    scene.world = world
+    # A camera looking straight down over the whole map.
+    width, depth = X1 - X0, Z1 - Z0
+    cam_data = bpy.data.cameras.new("MapCamera")
+    cam_data.type = "ORTHO"
+    cam_data.ortho_scale = max(width, depth)
+    cam_data.clip_end = 1000.0
+    cam = bpy.data.objects.new("MapCamera", cam_data)
+    cam.location = ((X0 + X1) / 2, -(Z0 + Z1) / 2, 400.0)
+    scene.collection.objects.link(cam)
+    scene.camera = cam
+    scene.render.engine = "BLENDER_EEVEE"
+    scene.render.resolution_x = MINIMAP_WIDTH
+    scene.render.resolution_y = round(MINIMAP_WIDTH * depth / width)
+    scene.render.resolution_percentage = 100
+    scene.render.film_transparent = False
+    scene.view_settings.view_transform = "Standard"
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.image_settings.color_mode = "RGB"
+    out = os.path.join(kit.ROOT, "assets", "ui", "minimap", "elaion.png")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    scene.render.filepath = out
+    bpy.ops.render.render(write_still=True)
+    return out
+
+
 def main():
     kit.clear_scene()
     heights, nx, nz = build_terrain()
@@ -581,6 +754,7 @@ def main():
         counts[item["type"]] = counts.get(item["type"], 0) + 1
     kit.log("level", f"layout: {counts}, scatter: { {k: len(v) for k, v in L.scatter.items()} }")
     kit.log("level", f"map -> {os.path.relpath(write_map(L, route, nx, nz), kit.ROOT)}")
+    kit.log("level", f"minimap -> {os.path.relpath(render_minimap(L), kit.ROOT)}")
 
 
 kit.run(main)

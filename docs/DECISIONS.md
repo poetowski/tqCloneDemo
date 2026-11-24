@@ -72,3 +72,13 @@ measured by `npm run tour -- --scenario=paths`.
 [CANON.md](CANON.md) registers every name; `npm run canon` (part of `npm run verify`)
 fails on unregistered names, names that aren't ours and broken doc links. The laws of the
 world live in [WORLD.md](WORLD.md), the recipes in [EXPANSION.md](EXPANSION.md).
+
+## D12: The map is a Blender render of the level, its moods are data (2026-11-24)
+
+*Why:* the minimap must look like the world and stay true to it. The level script
+renders it from the same terrain and prop models the game uses, so it is our own asset
+(D1) and is rebuilt with the level. The art bible's area moods, wind and cloud shade
+live in `data/atmosphere.json`, reached by every shader through shader globals, so a new
+area's air is a few lines of data. Plants sway because they are painted with the
+`Foliage` material, not because of their colour, so nothing that only shares a leaf's
+colour sways.

@@ -241,6 +241,15 @@ const commands = {
         }
       };
       touch(path.join(ROOT, 'assets', 'models'));
+      // A new time alone isn't enough: Godot also compares each source's checksum
+      // and skips unchanged files. Forget the checksums so every model really
+      // goes through tools/import/post_import.gd again.
+      const imported = path.join(ROOT, '.godot', 'imported');
+      if (existsSync(imported)) {
+        for (const name of readdirSync(imported)) {
+          if (/\.glb-[0-9a-f]+\.md5$/.test(name)) rmSync(path.join(imported, name));
+        }
+      }
     }
     return importAssets();
   },

@@ -1,8 +1,11 @@
 // The ground of a level (tools/blender/level/*.py): flat-shaded faces painted with
 // palette colours as vertex colours. Vertex alpha below 1 makes a face glow (the Styx
-// seeping through the necropolis). A little world noise keeps big flats alive.
+// seeping through the necropolis). A little world noise keeps big flats alive, and
+// cloud shade drifts over it (weather.gdshaderinc).
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+
+#include "res://src/shaders/weather.gdshaderinc"
 
 uniform float emission_energy = 4.0;
 uniform float variation = 0.08;
@@ -28,7 +31,7 @@ void fragment() {
 	vec3 colour = COLOR.rgb;
 	float n = noise2(world_pos.xz * 0.12) * 0.6 + noise2(world_pos.xz * 0.7) * 0.4;
 	colour *= 1.0 - variation + n * variation * 2.0;
-	ALBEDO = colour;
+	ALBEDO = colour * cloud_tint(cloud_shade(world_pos.xz, TIME));
 	ROUGHNESS = 0.96;
 	SPECULAR = 0.25;
 	float glow = clamp(1.0 - COLOR.a, 0.0, 1.0);

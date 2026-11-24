@@ -271,6 +271,39 @@ def sacks(slug="sacks"):
     export(slug)
 
 
+def fishing_nets(slug="fishing_nets"):
+    """Nets drying on a driftwood rack by the boats: two forked posts, a pole, the
+    net hanging in loose folds, cork floats along its edge, a basket beneath."""
+    kit.clear_scene()
+    rng = random.Random(6)
+    m = kit.Mesh(slug)
+    for x in (-1.4, 1.4):
+        m.cylinder((x, 0, 0), (x, 0, 1.75), 0.06, 0.05, "wood", segments=6)
+        m.cylinder((x, 0, 1.6), (x - 0.15, 0, 1.9), 0.03, 0.025, "wood", segments=4)
+        m.cylinder((x, 0, 1.6), (x + 0.15, 0, 1.9), 0.03, 0.025, "wood", segments=4)
+    m.cylinder((-1.7, 0, 1.78), (1.7, 0, 1.78), 0.04, 0.04, "wood_dark", segments=6)
+    # The net: two loose sheets hanging from the pole, gathered in folds.
+    for side in (-1, 1):
+        rows = []
+        for i in range(7):
+            z = 1.75 - i * 0.22
+            ring = []
+            for k in range(10):
+                x = -1.5 + k * 0.33
+                fold = math.sin(k * 1.7 + i * 0.6) * 0.06
+                ring.append((x, side * (0.04 + i * 0.05) + fold, z - abs(math.sin(k * 0.9)) * 0.08 * i / 6))
+            rows.append(ring)
+        for i in range(6):
+            for k in range(9):
+                m.polygon([rows[i][k], rows[i][k + 1], rows[i + 1][k + 1], rows[i + 1][k]], "rope" if (i + k) % 3 else "straw", double=True)
+        for k in range(0, 10, 2):
+            m.ico(rows[-1][k], 0.05, "wool_ochre", subdivisions=0)
+    m.lathe([(0.0, 0.0), (0.3, 0.02), (0.36, 0.3), (0.32, 0.32)], "straw", segments=10, center=(0.6, -0.7, 0))
+    m.finish()
+    kit.collision_box(slug, (0, 0, 0.9), (3.4, 0.6, 1.8))
+    export(slug)
+
+
 def main():
     house("house_a", 1, 6.4, 4.6, 2.7)
     house("house_b", 2, 5.4, 4.2, 2.5, annex=True)
@@ -285,6 +318,7 @@ def main():
     jetty()
     crate()
     sacks()
+    fishing_nets()
 
 
 kit.run(main)

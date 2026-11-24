@@ -60,6 +60,9 @@ Never pick a colour that isn't in the palette.
   metalness and emission from `palette_params.png`. In Godot every model uses
   `assets/materials/palette.tres` (shader `src/shaders/palette.gdshader`). It supports
   per-instance hit `flash`, `tint` and occlusion `fade` (dither).
+- Everything alive (trees, shrubs, grass, flowers) is painted with `Foliage` instead: the
+  same palette with wind (`assets/materials/foliage.tres`). Stone and dead wood stay on
+  `Palette`, so a dropped draught never sways.
 - Ancient marble was **painted**. Temples carry faded polychrome: red and blue meander
   friezes, gold on the capitals. Use it sparingly and keep it weathered.
 - Pottery uses the black-figure scheme: clay body, black glaze bands, a meander band.
@@ -73,6 +76,29 @@ Never pick a colour that isn't in the palette.
 - Areas shift mood: **village** warm and clean; **terraces** dappled under olive
   shade; **necropolis** desaturated with teal ground mist and asphodel;
   **sanctuary** dusk-lit with a forge glow from below.
+
+## Atmosphere
+
+How the moods above are made (all in data: `data/atmosphere.json`):
+
+- **Moods by area.** Each zone names a mood; `src/world/atmosphere.gd` blends haze colour
+  and density, saturation, contrast, ambient light, the sun's colour and strength over
+  3.5 s as the hero walks in. Shore and village warm and clean, terraces golden and
+  dappled, the road dusty, the necropolis grey-teal and hazy, the sanctuary at dusk, the
+  arena forge-lit.
+- **Wind.** Leaves, grass and flowers sway (more the higher they reach, trunks stay
+  planted); leaves flutter. Strength per mood: a sea breeze on the shore, still air in
+  the necropolis.
+- **Cloud shade.** Soft shadows drift with the wind over ground and models, cooler as
+  well as darker. Heavier over the terraces (the dappling) and the necropolis.
+- **Motes.** What floats around the hero: pollen (village, terraces), dust (shore,
+  road), Styx wisps (necropolis, teal), embers (sanctuary, arena, fire). Glow only in
+  gold, teal or fire.
+- **Life.** Gulls wheel over the bay and crows over the graves; smoke rises from three
+  village hearths and leans with the wind.
+
+The weather reaches every shader through the project's shader globals (`wind_strength`,
+`wind_direction`, `cloud_cover`; `src/shaders/weather.gdshaderinc`).
 
 ## VFX language
 

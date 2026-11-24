@@ -53,6 +53,21 @@ func test_quests_talk_to_people_who_exist() -> void:
 				assert_true(DB.enemies.has(String(goal["enemy"])), "%s kills %s" % [id, goal["enemy"]])
 
 
+func test_every_zone_has_a_mood_and_every_flock_a_model() -> void:
+	var atmosphere := DB.load_json("res://data/atmosphere.json") as Dictionary
+	var moods := atmosphere["moods"] as Dictionary
+	assert_true(moods.has(String(atmosphere["start"])), "the starting mood")
+	var layout := DB.load_json("res://data/level/elaion_layout.json") as Dictionary
+	for entry: Variant in layout["items"] as Array:
+		var item := entry as Dictionary
+		match String(item["type"]):
+			"zone":
+				assert_true(moods.has(String(item.get("mood", ""))), "mood of %s" % item["name"])
+			"birds":
+				var species := String(item.get("species", ""))
+				assert_true(ResourceLoader.exists("res://assets/models/characters/%s/%s.glb" % [species, species]), "model of %s" % species)
+
+
 func test_core_sounds_exist() -> void:
 	for sound: StringName in [&"swing", &"hit", &"level_up", &"bull_roar", &"village", &"boss", &"shore"]:
 		assert_not_null(Sfx.stream(sound), String(sound))

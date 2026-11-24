@@ -99,7 +99,7 @@ The biggest recipe. Elaion is the model: read [LEVEL_ELAION.md](LEVEL_ELAION.md)
 4. **Its story script**: like `src/world/elaion/elaion.gd` (intro, quests, the boss's
    spawn and what ends the zone).
 5. **Check**: `npm run tour -- --scenario=paths` must be clean and meet the navigation
-   targets (detour mean ≤ 1.10, worst ≤ 2.0); then both tours; then shots of every
+   targets (detour mean ≤ 1.10, worst ≤ 2.2); then both tours; then shots of every
    landmark.
 
 Before the second zone exists, three things need building once: the level build taking

@@ -101,7 +101,7 @@ def import_model(path):
                 obj.hide_render = True
                 continue
             for slot in obj.material_slots:
-                if slot.material and slot.material.name.startswith("Imported_Palette"):
+                if slot.material and slot.material.name.startswith(("Imported_Palette", "Imported_Foliage")):
                     slot.material = palette
     return objects
 

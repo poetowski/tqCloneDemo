@@ -48,6 +48,7 @@ reach the next landmark (shrine, quest step) → boss.
 | Q W E R | Skill slots 2–5 |
 | 1 / 2 | Healing Draught / Ichor Draught |
 | I / C / K | Inventory / Character / The Loom (skills) |
+| Tab / M | The full map (the minimap in the corner is always on) |
 | Alt (hold) | Show every item label on the ground |
 | Mouse wheel | Zoom |
 | Esc | Close panels, otherwise pause menu |

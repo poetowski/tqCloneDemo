@@ -13,6 +13,10 @@ signal ready_to_play()
 @export var music := &""
 @export var ambience := &""
 @export var player_level := 1
+## The level seen from above (rendered in Blender by its level script) and the world
+## rectangle it covers (x, z), for the minimap and the full map.
+@export var minimap: Texture2D
+@export var map_bounds := Rect2()
 
 var player: Player
 var camera: GameCamera
@@ -58,8 +62,8 @@ func _ready() -> void:
 ## Panels are added by the game's levels (inventory, hero, Loom, dialogue, pause).
 func _add_panels() -> void:
 	for entry: Array in [[&"inventory", "res://src/ui/panels/inventory_panel.gd"], [&"character", "res://src/ui/panels/character_panel.gd"],
-			[&"loom", "res://src/ui/panels/loom_panel.gd"], [&"dialogue", "res://src/ui/panels/dialogue_panel.gd"],
-			[&"pause", "res://src/ui/panels/pause_panel.gd"]]:
+			[&"loom", "res://src/ui/panels/loom_panel.gd"], [&"map", "res://src/ui/panels/map_panel.gd"],
+			[&"dialogue", "res://src/ui/panels/dialogue_panel.gd"], [&"pause", "res://src/ui/panels/pause_panel.gd"]]:
 		var path := String(entry[1])
 		if ResourceLoader.exists(path):
 			var panel := (load(path) as GDScript).new() as Control
@@ -100,6 +104,8 @@ func _on_scenario(scenario: String) -> void:
 			add_child(pilot)
 		"panels":
 			hud.toggle_panel(&"inventory")
+		"map":
+			hud.toggle_panel(&"map")
 		"loom":
 			hud.toggle_panel(&"loom")
 		"hero":

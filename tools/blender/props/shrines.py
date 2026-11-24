@@ -106,12 +106,59 @@ def shards(slug="shards"):
     export(slug)
 
 
+def herm(slug="herm"):
+    """A herm: the square stone pillar of Hermes that marks roads and boundaries, a
+    bearded head on top, a garland and the offerings travellers leave at its foot."""
+    kit.clear_scene()
+    rng = random.Random(5)
+    m = kit.Mesh(slug)
+    m.box((0, 0, 0.12), (0.7, 0.7, 0.24), "limestone", bevel=0.02)
+    m.box((0, 0, 0.95), (0.34, 0.3, 1.45), "marble", bevel=0.015)
+    m.box((0, 0, 1.72), (0.4, 0.36, 0.08), "marble_shadow")
+    m.sphere((0, 0, 1.92), 0.17, "marble", scale=(0.9, 1.0, 1.15), segments=8, rings=6)
+    m.sphere((0, -0.09, 1.82), 0.12, "marble_shadow", scale=(1.0, 0.7, 1.1), segments=6, rings=4)  # the beard
+    m.box((0, -0.16, 1.92), (0.05, 0.04, 0.03), "stone_dark")  # the brow
+    m.torus((0, 0, 1.68), 0.21, 0.035, "olive_leaf", segments=10, sides=4)  # a garland
+    for k in range(3):
+        a = rng.uniform(-0.6, 0.6)
+        m.ico((math.cos(a - 1.57) * 0.45, math.sin(a - 1.57) * 0.45, 0.28), 0.05, "clay", subdivisions=0)
+    m.cylinder((0.25, -0.45, 0.24), (0.25, -0.45, 0.34), 0.06, 0.08, "terracotta", segments=8)  # a little lamp
+    m.finish()
+    kit.collision_box(slug, (0, 0, 0.9), (0.6, 0.6, 1.8))
+    export(slug)
+
+
+def votives(slug="votives"):
+    """Offerings at the Fates' feet: clay figurines, oil lamps, a spindle whorl, a
+    wreath of olive. No collision: they lie at a statue's base."""
+    kit.clear_scene()
+    rng = random.Random(8)
+    m = kit.Mesh(slug)
+    for k in range(6):
+        a = rng.uniform(0, math.tau)
+        d = rng.uniform(0.2, 0.7)
+        x, y = math.cos(a) * d, math.sin(a) * d
+        if k % 3 == 0:  # a figurine: a bell-shaped body, a round head
+            m.cone((x, y, 0.0), (x, y, 0.22), 0.06, "terracotta", segments=6)
+            m.ico((x, y, 0.25), 0.04, "clay", subdivisions=1)
+        elif k % 3 == 1:  # an oil lamp
+            m.sphere((x, y, 0.04), 0.07, "terracotta_dark", scale=(1.4, 1.0, 0.5), segments=8, rings=4)
+            m.sphere((x + 0.08, y, 0.06), 0.02, "furnace", segments=5, rings=3)
+        else:  # a spindle whorl, Klotho's sign
+            m.cylinder((x, y, 0.0), (x, y, 0.04), 0.05, 0.05, "stone_dark", segments=8)
+    m.torus((0.0, -0.35, 0.03), 0.22, 0.04, "olive_leaf", segments=12, sides=4)
+    m.finish()
+    export(slug)
+
+
 def main():
     hearth()
     brazier()
     chest()
     forge_pit()
     shards()
+    herm()
+    votives()
 
 
 kit.run(main)

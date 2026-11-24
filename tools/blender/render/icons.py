@@ -69,7 +69,7 @@ def import_glb(path):
             if "col" in obj.name.lower():
                 obj.hide_render = True
             for slot in obj.material_slots:
-                if slot.material and slot.material.name.startswith("Imported_Palette"):
+                if slot.material and slot.material.name.startswith(("Imported_Palette", "Imported_Foliage")):
                     slot.material = palette
     return objects
 

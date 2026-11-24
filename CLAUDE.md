@@ -113,9 +113,17 @@ Binaries are pinned in `tools/dev.mjs` (`%LOCALAPPDATA%\Programs\Godot\4.7.2\`,
 - Imported meshes get the project materials by name in `tools/import/post_import.gd`
   (`Palette`, `Terrain`, `Water`). Per-instance shader parameters (`flash`, `tint`,
   `fade`, `dissolve`, `highlight`) need no material copies.
-- Godot re-imports a source only when its modified time changes; a byte-identical
-  re-export or a post-import script change re-imports nothing. Run
-  `npm run import -- --force` after changing `post_import.gd`.
+- Godot re-imports a source only when its modified time *and* checksum change; a
+  byte-identical re-export or a post-import script change re-imports nothing. Run
+  `npm run import -- --force` after changing `post_import.gd` (it clears the stored
+  checksums). Plants must use the `Foliage` material (`mesh.material = "Foliage"` in
+  Blender) to sway; new materials need a line in `post_import.gd`'s MATERIALS.
+- Weather shader globals (`wind_strength`, `wind_direction`, `cloud_cover`) are declared
+  in project.godot's [shader_globals]; never read them back with
+  `RenderingServer.global_shader_parameter_get` (stalls rendering, null when headless):
+  `Atmosphere` keeps their values.
+- Blender: after editing mesh attribute data from Python, call `mesh.update()`, or a
+  render draws the copy evaluated earlier (e.g. for the export).
 - The navigation map syncs asynchronously: paths are empty for the first ~30 physics
   frames after a level loads (actors steer straight until then). Wait before querying.
   In a `--script` tool the map never syncs: work on the NavigationMesh's polygons.

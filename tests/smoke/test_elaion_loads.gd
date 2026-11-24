@@ -51,6 +51,38 @@ func test_a_freed_hover_target_is_forgotten() -> void:
 	assert_null(Game.player.hovered, "the picked-up item no longer counts as under the cursor")
 
 
+func test_the_maps_point_at_the_next_goal() -> void:
+	Quests.reset()
+	Quests.start(&"weaver")
+	var marks := MapMarkers.objectives(get_tree())
+	assert_eq(marks.size(), 1)
+	var klotho: Node3D = null
+	for node in get_tree().get_nodes_in_group(&"npcs"):
+		if String(node.get(&"npc_id")) == "klotho":
+			klotho = node as Node3D
+	assert_almost_eq((marks[0]["position"] as Vector3).distance_to(klotho.global_position), 0.0, 0.01, "a talk goal points at the person")
+	Quests.talked_to("klotho")
+	marks = MapMarkers.objectives(get_tree())
+	var terraces := _level.find_child("Zone_TheOliveTerraces", true, false) as Node3D
+	assert_almost_eq((marks[0]["position"] as Vector3).distance_to(terraces.global_position), 0.0, 0.01, "a marker names the zone")
+	Quests.reset()
+	Quests.start(&"weaver")
+
+
+func test_moods_colour_the_air() -> void:
+	var atmosphere := _level.find_child("Atmosphere", true, false) as Atmosphere
+	assert_not_null(atmosphere)
+	atmosphere.set_mood(&"necropolis", true)
+	await wait_frames(6)
+	var env := (_level.get_node("WorldEnvironment") as WorldEnvironment).environment
+	assert_eq(atmosphere.mood, &"necropolis")
+	assert_almost_eq(env.fog_density, 0.0062, 0.0005, "the necropolis is hazier")
+	assert_lt(env.adjustment_saturation, 1.0, "and greyer")
+	atmosphere.set_mood(&"village", true)
+	await wait_frames(6)
+	assert_gt(env.adjustment_saturation, 1.0)
+
+
 func test_first_quest_started() -> void:
 	assert_true(Quests.is_active(&"weaver"))
 

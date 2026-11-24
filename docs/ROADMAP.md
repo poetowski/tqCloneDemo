@@ -31,9 +31,10 @@ The vertical slice's plan and state. Update this at the end of every working ses
 3. **Enemy pathing**: enemies still follow `NavigationAgent3D` (3D point reach, corner
    skipping at 1.0 m); move them to the Player's ground-plane path following if they
    snag on terrace walls.
-4. **Readability**: loot label stacking, a minimap or compass toward the quest target.
-   (Hover highlight is in.)
-5. **Necropolis mood**: darker light there (the teal ground mist is in).
+4. **Readability**: loot label stacking; fog of war on the maps (explored ground only).
+   (Hover highlight, the minimap with goal markers and the full map are in.)
+5. **More life**: butterflies and lizards in the sun, fish jumping in the bay, sounds for
+   the gulls and crows. (Moods per area, wind, cloud shade, motes, birds and smoke are in.)
 6. **Merchant** in Elaion (sell junk, buy draughts) — the gold sink the loot loop wants.
 7. **Save/continue** (JSON): hero, bag, gear, Loom, quests, world flags.
 8. **Settings**: volume sliders, key rebinding, resolution.
@@ -87,6 +88,15 @@ The vertical slice's plan and state. Update this at the end of every working ses
   +32%. Navmesh flood fill compares heights (a temple top no longer counts as reached
   ground); actors set back on the ground land on its surface, not the navmesh's height.
   Fixed: a hovered item or foe freed under the cursor threw errors on every click.
+- **2026-11-24 (environment)** — Richer land: olive trees with roots, two-tone crowns and
+  silver sprigs; fuller cypresses; Aleppo pines, fig trees, broom, thyme, acanthus, reeds,
+  tall grass, clover, wildflowers, pebbles, driftwood; herms on the road, battle debris in
+  the necropolis, offerings at the Fates, nets on the shore. Plants sway on the new
+  `Foliage` material; cloud shade drifts over everything; each area blends its mood
+  (`data/atmosphere.json`: haze, grading, sun, wind, clouds, motes); gulls and crows
+  wheel; hearth smoke rises. Minimap (top right, goal marker pinned to its rim when far)
+  and full map (Tab / M), both drawn from a Blender render of the level. Props 560 → 644,
+  ground cover ~3 300 → ~5 900. `npm run import -- --force` now really reimports.
 - **2026-11-24 (world)** — A mechanism for growing the world consistently:
   [WORLD.md](WORLD.md) (the laws, the three acts, the zone template),
   [CANON.md](CANON.md) (every name, plus names that aren't ours),

@@ -28,13 +28,13 @@ x -135..110, z -135..100; the sea fills the west.
 
 | Area | What happens | Encounters |
 |---|---|---|
-| **The beach** | The hero wakes; first Hearth of Hestia; the beached boat with its painted eye. | — |
-| **Elaion** | Whitewashed houses, the well, Dion (two draughts), Klotho at her loom (quest). Pots to smash. | none (safe) |
-| **The Olive Terraces** | Five terraces climbing east, dry-stone retaining walls, olive rows, a ruined farmhouse, a chest. Quest: sever 10 Unthreaded. | 4 shade packs, 2 boar packs, levels 1–3 |
-| **The Cypress Road** | A climb north between cypress rows. | archers on the road, level 3 |
-| **Necropolis of the Forgotten Siege** | Stelae, sarcophagi, asphodel, Styx cracks glowing in the ground, second Hearth of Hestia, a chest; the tholos tomb. | 4 packs, levels 3–4; **Captain Lykos** + escort at the tholos (level 5) |
-| **Sanctuary of the Moirai** | The sealed gate (opens with the seal), a processional way of columns, the court with the three Fates (Atropos' hands empty), a painted temple ruin and the third Hearth of Hestia (0, -86), the checkpoint before the bull. | — |
-| **The arena** | A paved circle ringed by columns at 13.5 m around (4, -107) (bait the bull into them), braziers, the forge pit. The bull keeps inside 15 m of its middle. | **Khalkotauros**, level 7 |
+| **The beach** | The hero wakes; first Hearth of Hestia; the beached boat with its painted eye, nets drying on a rack, driftwood and reeds at the tide line, gulls over the bay. Mood: *shore*. | — |
+| **Elaion** | Whitewashed houses, the well, Dion (two draughts), Klotho at her loom (quest), fig trees, smoke from three hearths, thyme and wildflowers. Pots to smash. Mood: *village*. | none (safe) |
+| **The Olive Terraces** | Five terraces climbing east, dry-stone retaining walls, olive rows, a ruined farmhouse, a chest, clover and poppies. Quest: sever 10 Unthreaded. Mood: *terraces*. | 4 shade packs, 2 boar packs, levels 1–3 |
+| **The Cypress Road** | A climb north between cypress rows, herms (Hermes' pillars) marking the way. Mood: *road*. | archers on the road, level 3 |
+| **Necropolis of the Forgotten Siege** | Stelae, sarcophagi, asphodel, Styx cracks glowing in the ground, second Hearth of Hestia, a chest; the tholos tomb; the siege's spears still standing in the earth, crows wheeling. Mood: *necropolis*. | 4 packs, levels 3–4; **Captain Lykos** + escort at the tholos (level 5) |
+| **Sanctuary of the Moirai** | The sealed gate (opens with the seal), a processional way of columns, the court with the three Fates (Atropos' hands empty), a painted temple ruin and the third Hearth of Hestia (0, -86), the checkpoint before the bull; offerings at the Fates' feet, acanthus on the ruins. Mood: *sanctuary*. | — |
+| **The arena** | A paved circle ringed by columns at 13.5 m around (4, -107) (bait the bull into them), braziers, the forge pit. The bull keeps inside 15 m of its middle. Mood: *arena*. | **Khalkotauros**, level 7 |
 
 ## Rules the layout follows
 
@@ -49,7 +49,8 @@ x -135..110, z -135..100; the sea fills the west.
 - Navigation is measured, not guessed: `npm run tour -- --scenario=paths` prints the
   detour ratio (walk vs. straight line over 400 random pairs 8–30 m apart) and the
   walkable area. After the 2026-11-24 rework: mean 1.05, 90th percentile 1.11, worst
-  1.7; 9 400 m² (was 1.17 / 1.50 / 3.9 and 7 100 m²). Keep it there.
+  1.7–2.0 (around the hill below the terrace top); 9 400 m² (was 1.17 / 1.50 / 3.9 and
+  7 100 m²). Keep it there.
 - Enemy level rises with the climb: 1–2 by the village, 5 at the captain, 7 for the boss.
 
 ## Changing it

@@ -10,13 +10,17 @@ tools/blender/lib/kit.py  (Mesh builder, palette UVs, rigs, export)
    ├─ characters/*.py  (humanoid.py / quadruped.py rigs + actions) ─► assets/models/characters/<slug>/<slug>.glb
    ├─ props/*.py                                                    ─► assets/models/props/<slug>/<slug>.glb
    ├─ items/*.py                                                    ─► assets/models/items/<slug>/<slug>.glb
-   ├─ level/elaion.py  (terrain + sea + layout)                     ─► assets/models/level/elaion_terrain + data/level/elaion_layout.json
+   ├─ level/elaion.py  (terrain + sea + layout + the map)          ─► assets/models/level/elaion_terrain + data/level/elaion_layout.json
+   │                                                                   + assets/ui/minimap/elaion.png
    ├─ render/icons.py  (portraits of the item models, skill emblems, logo) ─► assets/icons/, assets/ui/
    └─ audio/sounds.py  (numpy DSP + aud)                            ─► assets/audio/*.wav|*.ogg
                          │
 Godot import ── tools/import/post_import.gd swaps materials by name:
    "Palette" → assets/materials/palette.tres (src/shaders/palette.gdshader)
+   "Foliage" → foliage.tres (the palette shader with wind: everything alive)
    "Terrain" → terrain.tres (vertex colours)     "Water" → water.tres
+   (After changing post_import.gd: `npm run import -- --force`; it also clears Godot's
+   stored checksums, without which unchanged models would not import again.)
 tools/build_level.gd ── data/level/elaion_layout.json ─► src/world/elaion/elaion.tscn (+ baked navmesh)
 ```
 
@@ -64,8 +68,13 @@ preview and by `ActorBody.attach` in Godot).
 kind), paths (ramps between zone edges), terraces, coast. It writes the terrain (flat
 faces, palette colours as linear float vertex colours; alpha < 1 glows), the sea, a
 top-down map (`.shots/elaion_map.png`) and the layout JSON: props, spawners, NPCs,
-hearths, chests, pots, the gate, zones, the boss mark, grass scatter and the test
-route. `npm run level` turns that into the Godot scene and bakes navigation (runtime
+hearths, chests, pots, the gate, zones (each with its mood), birds, hearth smoke, the
+boss mark, the ground cover scatter (grass, flowers, thyme, broom, reeds, pebbles,
+acanthus) and the test route. Last it renders the **minimap**: every prop model
+imported once and stamped at its placements on the terrain, lit by the low western
+sun, the ground you can't walk on darkened so paths and places read, photographed
+straight down onto exactly the level's bounds (`assets/ui/minimap/elaion.png`; Godot
+gets the bounds from the layout). `npm run level` turns that into the Godot scene and bakes navigation (runtime
 objects get proxy colliders during the bake so paths go around them). The bake marks
 everything below the waterline unwalkable (the seabed slopes on to -4 m), drops
 isolated islands under 16 m², then keeps only the polygons connected to the start

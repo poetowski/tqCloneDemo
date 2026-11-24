@@ -256,6 +256,29 @@ def altar(slug="altar"):
     export(slug)
 
 
+def battle_debris(slug, seed):
+    """What the forgotten siege left in the earth: spears still standing at angles,
+    a shield face-down, a helmet. No collision: the dead's arms, not a wall."""
+    kit.clear_scene()
+    rng = random.Random(seed)
+    m = kit.Mesh(slug)
+    for k in range(3):
+        a = rng.uniform(0, math.tau)
+        x, y = math.cos(a) * rng.uniform(0.2, 0.8), math.sin(a) * rng.uniform(0.2, 0.8)
+        tilt = rng.uniform(12, 32)
+        with m.at(location=(x, y, -0.2), rotation=(tilt * math.cos(a), tilt * math.sin(a), 0)):
+            length = rng.uniform(1.5, 2.1)
+            m.cylinder((0, 0, 0), (0, 0, length), 0.025, 0.022, "wood_dark", segments=5)
+            m.cone((0, 0, length), (0, 0, length + 0.28), 0.045, "bronze_rust", segments=4)
+    with m.at(location=(rng.uniform(-0.4, 0.4), rng.uniform(-0.4, 0.4), 0.05), rotation=(rng.uniform(-12, 12), rng.uniform(170, 190), 0)):
+        m.lathe([(0.0, 0.0), (0.45, 0.02), (0.5, 0.1), (0.46, 0.12), (0.0, 0.08)], "bronze_rust", segments=14)
+    with m.at(location=(0.7, -0.5, 0.12), rotation=(rng.uniform(70, 100), 0, rng.uniform(0, 360))):
+        m.sphere((0, 0, 0), 0.15, "bronze_rust", scale=(0.9, 1.1, 1.05), segments=8, rings=5)
+        m.box((0, -0.1, -0.08), (0.08, 0.06, 0.16), "bronze_rust")
+    m.finish()
+    export(slug)
+
+
 def main():
     column("column", seed=1)
     column("column_broken", broken_at=2.6, seed=2)
@@ -271,6 +294,8 @@ def main():
     tholos()
     gate()
     altar()
+    battle_debris("battle_debris_a", 1)
+    battle_debris("battle_debris_b", 2)
 
 
 kit.run(main)

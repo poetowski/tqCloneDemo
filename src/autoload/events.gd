@@ -21,6 +21,9 @@ signal quest_updated(quest_id: StringName)
 signal dialogue_requested(npc: Node3D)
 ## The player entered a named area (banner text).
 signal area_entered(area_name: String)
+## The hero walked into another zone (every time, not only the first): its mood
+## colours the air (src/world/atmosphere.gd), its name shows under the minimap.
+signal zone_changed(zone: Node3D)
 ## A boss noticed the player; the HUD shows its bar.
 signal boss_engaged(boss: Node3D)
 ## The boss fell.

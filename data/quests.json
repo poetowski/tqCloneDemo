@@ -1,10 +1,10 @@
 {
-  "_doc": "Quests (docs/GAME_DESIGN.md#quests). Each stage has a goal: talk (npc), kill (tag or enemy id, count), item (picked up), flag (Game flag set). reward on a stage is given when that stage completes. next starts another quest when this one ends.",
+  "_doc": "Quests (docs/GAME_DESIGN.md#quests). Each stage has a goal: talk (npc), kill (tag or enemy id, count), item (picked up), flag (Game flag set). reward on a stage is given when that stage completes. next starts another quest when this one ends. marker (optional) places the goal on the maps when the goal itself doesn't: a zone name or a node name (src/ui/hud/map_markers.gd).",
   "weaver": {
     "title": "The Weaver of Elaion",
     "stages": [
       {"text": "Speak with old Klothia at her loom in Elaion.", "goal": {"type": "talk", "npc": "klotho"}},
-      {"text": "Sever the Unthreaded in the olive terraces", "goal": {"type": "kill", "tag": "unthreaded", "count": 10}},
+      {"text": "Sever the Unthreaded in the olive terraces", "goal": {"type": "kill", "tag": "unthreaded", "count": 10}, "marker": {"zone": "The Olive Terraces"}},
       {"text": "Return to Klothia in Elaion.", "goal": {"type": "talk", "npc": "klotho"}, "reward": {"xp": 160, "unique": "thread_woven_chiton"}}
     ],
     "next": "dead_walk"
@@ -13,7 +13,7 @@
     "title": "Where the Dead Walk",
     "stages": [
       {"text": "Climb the cypress road to the necropolis and destroy Captain Lykos.", "goal": {"type": "kill", "enemy": "captain_lykos", "count": 1}},
-      {"text": "Take the Seal of the Sanctuary to the gate above the necropolis.", "goal": {"type": "flag", "flag": "gate_open"}, "reward": {"xp": 220}}
+      {"text": "Take the Seal of the Sanctuary to the gate above the necropolis.", "goal": {"type": "flag", "flag": "gate_open"}, "marker": {"node": "SanctuaryGate"}, "reward": {"xp": 220}}
     ],
     "next": "bronze_heart"
   },

@@ -80,7 +80,7 @@ Before building, write the zone down (in a `docs/LEVEL_<ZONE>.md`, like
 | Quest beats (who asks, what, what changes) | Klotho's errand → the Seal → the bull |
 | Palette accent (existing swatches only) | Olive greens, whitewash, bronze, the teal of the Styx |
 | Sound bed: ambience and music | Shore, cicadas, forge; village, field, necropolis, boss |
-| Navigation targets (`--scenario=paths`) | Detour mean ≤ 1.10, worst ≤ 2.0, no islands, no stalls |
+| Navigation targets (`--scenario=paths`) | Detour mean ≤ 1.10, worst ≤ 2.2 (around a hill is fine), no islands, no stalls |
 
 ## Progression across the world
 

@@ -22,7 +22,10 @@ const SCRIPTS := {
 	"spawner": "res://src/world/spawner.gd", "npc": "res://src/world/npc.gd", "shrine": "res://src/world/shrine.gd",
 	"chest": "res://src/world/chest.gd", "breakable": "res://src/world/breakable.gd", "gate": "res://src/world/gate.gd",
 	"fire": "res://src/world/fire.gd", "zone": "res://src/world/zone.gd", "grass": "res://src/world/grass_field.gd", "mist": "res://src/world/mist.gd",
+	"atmosphere": "res://src/world/atmosphere.gd", "birds": "res://src/world/birds.gd", "smoke": "res://src/world/smoke.gd",
 }
+## The level's map, rendered top-down in Blender by the level script.
+const MINIMAP := "res://assets/ui/minimap/elaion.png"
 
 var _root: Node3D
 var _owned: Array[Node] = []
@@ -47,7 +50,14 @@ func _build() -> void:
 	_root.set(&"start_marker", NodePath("Start"))
 	_root.set(&"music", &"village")
 	_root.set(&"ambience", &"shore")
+	var bounds := layout.get("bounds", [-150, -150, 150, 150]) as Array
+	_root.set(&"map_bounds", Rect2(float(bounds[0]), float(bounds[1]), float(bounds[2]) - float(bounds[0]), float(bounds[3]) - float(bounds[1])))
+	if ResourceLoader.exists(MINIMAP):
+		_root.set(&"minimap", load(MINIMAP))
 	_environment()
+	var atmosphere := _scripted("atmosphere", Node3D.new())
+	atmosphere.name = "Atmosphere"
+	_add(_root, atmosphere)
 	var nav := NavigationRegion3D.new()
 	nav.name = "Navigation"
 	nav.navigation_mesh = _navmesh()
@@ -151,6 +161,7 @@ func _build() -> void:
 				zone.set(&"radius", float(item.get("radius", 20.0)))
 				zone.set(&"music", StringName(String(item.get("music", ""))))
 				zone.set(&"ambience", StringName(String(item.get("ambience", ""))))
+				zone.set(&"mood", StringName(String(item.get("mood", ""))))
 				zone.name = "Zone_" + String(item["name"]).replace(" ", "")
 				if bool(item.get("fog", false)):
 					var mist := _scripted("mist", Node3D.new())
@@ -170,6 +181,20 @@ func _build() -> void:
 					var centre := item["arena"] as Array
 					mark.set_meta("arena_center", Vector2(float(centre[0]), float(centre[1])))
 				_add(gameplay, mark)
+			"birds":
+				var flock := _scripted("birds", Node3D.new())
+				flock.name = "Birds_%d" % counts[kind]
+				flock.set(&"kind", String(item.get("species", "gull")))
+				flock.set(&"count", int(item.get("count", 5)))
+				flock.set(&"radius", float(item.get("radius", 16.0)))
+				flock.set(&"height", float(item.get("height", 9.0)))
+				flock.set(&"position", at)
+				_add(_child(_root, "Life"), flock)
+			"smoke":
+				var smoke := _scripted("smoke", GPUParticles3D.new())
+				smoke.name = "Smoke_%d" % counts[kind]
+				smoke.set(&"position", at + Vector3.UP * float(item.get("height", 4.0)))
+				_add(_child(_root, "Life"), smoke)
 	var grass := _scripted("grass", Node3D.new())
 	grass.set(&"name", "Grass")
 	grass.set(&"layout_path", LAYOUT)

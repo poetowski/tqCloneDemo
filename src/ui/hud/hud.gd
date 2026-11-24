@@ -2,7 +2,8 @@ class_name HUD
 extends CanvasLayer
 ## The in-game interface: health and ichor orbs, the skill bar and belt, the XP
 ## thread, the hovered foe's frame, the boss bar, messages, area banners, the
-## quest tracker and the panels (bag, hero, Loom, dialogue, pause).
+## minimap with the quest tracker under it, and the panels (bag, hero, Loom, map,
+## dialogue, pause).
 
 const ORB := preload("res://src/shaders/orb.gdshader")
 const ORB_SIZE := 172.0
@@ -51,6 +52,7 @@ func _ready() -> void:
 	_build_target()
 	_build_boss()
 	_build_messages()
+	_build_minimap()
 	_build_quests()
 	_build_death()
 	Events.notified.connect(notify)
@@ -124,6 +126,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		toggle_panel(&"character")
 	elif event.is_action_pressed(&"skills_panel"):
 		toggle_panel(&"loom")
+	elif event.is_action_pressed(&"map_toggle"):
+		toggle_panel(&"map")
 	elif event.is_action_pressed(&"pause"):
 		if not close_panels():
 			toggle_panel(&"pause")
@@ -391,10 +395,18 @@ func show_banner(title: String, subtitle: String = "") -> void:
 	Sfx.play(&"banner")
 
 
+func _build_minimap() -> void:
+	var minimap := Minimap.new()
+	var side := Minimap.RADIUS * 2.0 + 24.0
+	anchor(minimap, 1.0, 0.0, Vector2(-side - 18, 12), Vector2(side, side))
+	_root.add_child(minimap)
+
+
 func _build_quests() -> void:
 	var box := PanelContainer.new()
 	box.add_theme_stylebox_override(&"panel", UIStyle.panel(Color(0.35, 0.25, 0.16, 0.8), Color(0.06, 0.045, 0.04, 0.6), 1, 6))
-	anchor(box, 1.0, 0.0, Vector2(-430, 20), Vector2(410, 10))
+	# Under the minimap (and its area name).
+	anchor(box, 1.0, 0.0, Vector2(-430, Minimap.RADIUS * 2.0 + 74.0), Vector2(410, 10))
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(box)
 	_quest_box = VBoxContainer.new()

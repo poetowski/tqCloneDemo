@@ -3,11 +3,12 @@ extends EditorScenePostImport
 ## Runs on every imported scene (the project's import default, see project.godot
 ## [importer_defaults]). Blender exports materials by name only; this swaps them for
 ## the project's own: "Palette" -> the palette shader (flash, tint, fade, dissolve),
-## "Terrain" -> the vertex-painted ground, "Water" -> the sea. Terrain colliders go
-## on the terrain layer.
+## "Foliage" -> the same with wind (plants sway), "Terrain" -> the vertex-painted
+## ground, "Water" -> the sea. Terrain colliders go on the terrain layer.
 
 const MATERIALS := {
 	"Palette": "res://assets/materials/palette.tres",
+	"Foliage": "res://assets/materials/foliage.tres",
 	"Terrain": "res://assets/materials/terrain.tres",
 	"Water": "res://assets/materials/water.tres",
 }

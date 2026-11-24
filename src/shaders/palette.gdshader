@@ -6,14 +6,19 @@
 //   tint      rgb + strength in a, for champions and golden summons
 //   fade      1 = solid; less dithers the model away (it blocks the camera)
 //   dissolve  0..1  unravels the model into Styx-teal light (death of the Unthreaded)
+// The "Foliage" material (assets/materials/foliage.tres) is this shader with `wind` 1:
+// plants sway. Cloud shade drifts over everything (weather.gdshaderinc).
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+
+#include "res://src/shaders/weather.gdshaderinc"
 
 uniform sampler2D palette_albedo : source_color, filter_nearest, repeat_disable;
 uniform sampler2D palette_params : filter_nearest, repeat_disable;
 uniform float emission_energy = 6.0;
 uniform float rim_strength = 0.12;
 uniform vec3 dissolve_color : source_color = vec3(0.37, 0.83, 0.78);
+uniform float wind = 0.0;
 
 instance uniform float flash = 0.0;
 instance uniform vec4 tint : source_color = vec4(1.0, 1.0, 1.0, 0.0);
@@ -41,6 +46,9 @@ float noise3(vec3 x) {
 }
 
 void vertex() {
+	if (wind > 0.0) {
+		VERTEX += wind_offset(VERTEX, MODEL_MATRIX, TIME) * wind;
+	}
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 }
 
@@ -62,7 +70,7 @@ void fragment() {
 	vec3 albedo = texture(palette_albedo, UV).rgb;
 	vec3 params = texture(palette_params, UV).rgb;
 	albedo = mix(albedo, albedo * tint.rgb * 1.5, tint.a);
-	ALBEDO = albedo;
+	ALBEDO = albedo * cloud_tint(cloud_shade(world_pos.xz, TIME));
 	ROUGHNESS = params.r;
 	METALLIC = params.g;
 	SPECULAR = 0.5;
