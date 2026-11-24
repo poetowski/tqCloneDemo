@@ -47,8 +47,13 @@ func test_a_freed_hover_target_is_forgotten() -> void:
 	var item := GroundItem.spawn(Item.create(&"potion_health"), Game.player.global_position + Vector3(3, 0, 0), Game.player.global_position)
 	Game.player.hovered = item
 	item.free()
+	# A freed object already compares equal to null; what matters is that it is gone,
+	# so `hovered is Actor` and typed calls on it no longer error (they froze the hero).
 	Game.player._unhandled_input(InputEventAction.new())
-	assert_null(Game.player.hovered, "the picked-up item no longer counts as under the cursor")
+	assert_eq(Game.player._hovered_id, 0, "the picked-up item no longer counts as under the cursor")
+	assert_false(Game.player.hovered is Actor, "testing the hover no longer touches a freed object")
+	Game.player._update_hover()
+	assert_true(Game.player.hovered == null or is_instance_valid(Game.player.hovered), "hovering again works")
 
 
 func test_the_maps_point_at_the_next_goal() -> void:

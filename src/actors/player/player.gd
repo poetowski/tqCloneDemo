@@ -36,7 +36,13 @@ var belt: Dictionary = {&"potion_health": 3, &"potion_ichor": 2}
 var gold := 0
 var skills := SkillBook.new()
 var input_enabled := true
-var hovered: Node3D
+var hovered: Node3D:
+	set(value):
+		hovered = value
+		_hovered_id = value.get_instance_id() if value != null else 0
+## The hovered object's id: a freed object compares equal to null, so only its id
+## can tell "nothing hovered" from "the hovered thing was freed".
+var _hovered_id := 0
 ## The way to the current goal over the navigation mesh, and the point walked to.
 var path := PackedVector3Array()
 var path_index := 0
@@ -302,9 +308,10 @@ func _update_hover() -> void:
 
 
 ## What the cursor was over may be gone (an item picked up, a foe dissolved): a
-## freed object can't even be passed as a typed argument, so drop it first.
+## freed object can't even be passed as a typed argument or tested with `is`, so drop
+## it first. (`hovered != null` is false for a freed object: check the id.)
 func _forget_freed_hover() -> void:
-	if hovered != null and not is_instance_valid(hovered):
+	if _hovered_id != 0 and not is_instance_id_valid(_hovered_id):
 		hovered = null
 		hover_changed.emit(null)
 

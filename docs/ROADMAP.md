@@ -97,6 +97,9 @@ The vertical slice's plan and state. Update this at the end of every working ses
   wheel; hearth smoke rises. Minimap (top right, goal marker pinned to its rim when far)
   and full map (Tab / M), both drawn from a Blender render of the level. Props 560 → 644,
   ground cover ~3 300 → ~5 900. `npm run import -- --force` now really reimports.
+- **2026-11-24 (fix)** — The hero sometimes froze: once the foe or item under the cursor
+  was freed, every click and frame errored on it before the move was given (the guard
+  `hovered != null` is false for a freed object). The hover is now tracked by instance id.
 - **2026-11-24 (world)** — A mechanism for growing the world consistently:
   [WORLD.md](WORLD.md) (the laws, the three acts, the zone template),
   [CANON.md](CANON.md) (every name, plus names that aren't ours),

@@ -137,6 +137,10 @@ Binaries are pinned in `tools/dev.mjs` (`%LOCALAPPDATA%\Programs\Godot\4.7.2\`,
 - With avoidance on, `velocity_computed` fires every physics frame with the last
   wanted velocity, not only when you set one: `Enemy` moves in it only on frames its
   AI steered, or a foe that stops to strike drifts on (the bull walked out of its arena).
+- A freed object compares equal to `null` (`freed != null` is false), yet passing it to
+  a typed parameter or testing it with `is` is an error that aborts the function. Guard
+  with `is_instance_valid(x)` or a stored instance id (`Player._hovered_id`), never
+  `x != null and not is_instance_valid(x)`.
 - A `-col` mesh's generated body is a child named `StaticBody3D`: identify it by its
   parent's name.
 - Ground placement at runtime: spawners raycast the terrain; set a node's `position`
