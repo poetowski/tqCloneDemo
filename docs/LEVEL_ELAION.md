@@ -38,13 +38,18 @@ x -135..110, z -135..100; the sea fills the west.
 
 ## Rules the layout follows
 
-- Walkable land is the union of zone discs and path corridors; outside it the land
-  rises into hills and cliffs (or slopes into the sea in the west). Paths ramp from
-  zone edge to zone edge; inside the terraces a path is a smooth ramp cut through the
-  steps.
-- Terrace risers are steep (unwalkable); dry-stone walls retain them, with gaps where
-  paths cross.
+- Walkable land is the union of zone discs and path corridors (paths 7–10 m wide);
+  around it runs a 3 m walkable verge (`VERGE`, slope 0.28) before the land rises into
+  hills and cliffs (or slopes into the sea in the west). Paths ramp from zone edge to
+  zone edge.
+- Terrace banks are walkable: each takes the last 28% of its terrace (`BANK_START`),
+  1.7 m over ~4 m. Dry-stone wall segments stand at their feet, one segment in three,
+  staggered from terrace to terrace: you can climb anywhere between them.
 - Nothing blocking stands on a path (`on_path` checks); trees keep 2+ m apart.
+- Navigation is measured, not guessed: `npm run tour -- --scenario=paths` prints the
+  detour ratio (walk vs. straight line over 400 random pairs 8–30 m apart) and the
+  walkable area. After the 2026-11-24 rework: mean 1.05, 90th percentile 1.11, worst
+  1.7; 9 400 m² (was 1.17 / 1.50 / 3.9 and 7 100 m²). Keep it there.
 - Enemy level rises with the climb: 1–2 by the village, 5 at the captain, 7 for the boss.
 
 ## Changing it

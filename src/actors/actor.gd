@@ -258,8 +258,19 @@ func _stay_on_navmesh() -> void:
 	if gap.length() > 0.8:
 		var step := Vector3(gap.x, 0.0, gap.y).limit_length(0.25)
 		global_position += step
+	if gap.length() > 0.8 or global_position.y < closest.y - 1.5:
 		if absf(closest.y - global_position.y) > 1.5:
-			global_position.y = closest.y + 0.1
+			global_position = ground_below(Vector3(global_position.x, closest.y, global_position.z))
+
+
+## The ground surface under (or a little over) a point. The navmesh only roughly
+## follows the ground (it can sit a hand's width under a slope): an actor set down
+## at its height can start inside the one-sided terrain and fall through.
+func ground_below(point: Vector3) -> Vector3:
+	var query := PhysicsRayQueryParameters3D.create(point + Vector3.UP * 2.5, point + Vector3.DOWN * 4.0, LAYER_TERRAIN | LAYER_WORLD)
+	query.exclude = [get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return (hit["position"] as Vector3) + Vector3.UP * 0.05 if not hit.is_empty() else point + Vector3.UP * 0.3
 
 
 ## Ticks statuses and the current action. Call once per physics frame.

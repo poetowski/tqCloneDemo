@@ -417,8 +417,7 @@ func _check_stuck(before: Vector3, delta: float) -> void:
 		return
 	# Back onto the walkable ground, and a fresh path from here: the old one may be
 	# aiming at a point beyond the wall.
-	var ground := NavigationServer3D.map_get_closest_point(map, global_position)
-	global_position = ground + Vector3.UP * 0.15
+	global_position = ground_below(NavigationServer3D.map_get_closest_point(map, global_position))
 	_path_goal = Vector3.INF
 
 

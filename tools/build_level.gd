@@ -296,8 +296,8 @@ func _keep_reachable(nav: NavigationRegion3D, start: Vector3) -> void:
 	var vertices := mesh.get_vertices()
 	var total := mesh.get_polygon_count()
 	# One id per corner on the bake grid. Neighbours meet at the same x/z grid point but
-	# each keeps its own height there, so the key ignores y (the land is a heightfield:
-	# nothing walkable lies above other walkable ground).
+	# each keeps its own height there, so the key ignores y; heights are compared when
+	# flooding (a platform over the ground shares its corners' x/z, not their height).
 	var ids: Dictionary = {}
 	var canonical := PackedInt32Array()
 	for v in vertices:
@@ -333,9 +333,10 @@ func _keep_reachable(nav: NavigationRegion3D, start: Vector3) -> void:
 		head += 1
 		for index in polygon:
 			for other in at_corner[canonical[index]]:
-				if reached[other] == 0:
-					reached[other] = 1
-					queue.append(other)
+				if reached[other] == 1 or not _meets_at(polygons[other], canonical, canonical[index], vertices[index].y, vertices):
+					continue
+				reached[other] = 1
+				queue.append(other)
 	if queue.size() < 100:
 		printerr("level: only %d polygons reach the start (%.1f m away); keeping the whole mesh" % [queue.size(), seed_distance])
 		return
@@ -344,6 +345,15 @@ func _keep_reachable(nav: NavigationRegion3D, start: Vector3) -> void:
 		if reached[p] == 1:
 			mesh.add_polygon(polygons[p])
 	print("level: kept the %d of %d polygons that reach the start (%.1f m from it)" % [queue.size(), total, seed_distance])
+
+
+## Whether `polygon` has the corner `corner` at about height `y`: neighbours differ
+## a little there; a platform above the same spot (a temple's top) differs by metres.
+func _meets_at(polygon: PackedInt32Array, canonical: PackedInt32Array, corner: int, y: float, vertices: PackedVector3Array) -> bool:
+	for index in polygon:
+		if canonical[index] == corner and absf(vertices[index].y - y) < 0.75:
+			return true
+	return false
 
 
 ## Under the sea the terrain slopes on to a seabed at -4 m: mark everything below the

@@ -43,15 +43,22 @@ ZONES = {
 }
 # (from, to, width, kind)
 PATHS = [
-    ("beach", "village", 6, "dirt"), ("village", "klotho", 5, "dirt"), ("village", "terraces", 7, "dirt"),
-    ("terraces", "terrace_top", 6, "dirt"), ("terrace_top", "road_a", 6, "dirt"), ("road_a", "road_b", 6, "dirt"),
-    ("road_b", "necropolis", 7, "dirt"), ("necropolis", "tholos", 6, "ash"), ("necropolis", "stairs_foot", 6, "ash"),
-    ("stairs_foot", "gate", 6, "paving"), ("gate", "court", 8, "paving"), ("court", "arena", 9, "paving"),
+    ("beach", "village", 8, "dirt"), ("village", "klotho", 7, "dirt"), ("village", "terraces", 9, "dirt"),
+    ("terraces", "terrace_top", 8, "dirt"), ("terrace_top", "road_a", 8, "dirt"), ("road_a", "road_b", 8, "dirt"),
+    ("road_b", "necropolis", 9, "dirt"), ("necropolis", "tholos", 8, "ash"), ("necropolis", "stairs_foot", 8, "ash"),
+    ("stairs_foot", "gate", 8, "paving"), ("gate", "court", 9, "paving"), ("court", "arena", 10, "paving"),
 ]
 
 
 TERRACE_STEP = 1.7
 TERRACE_RISE = 0.12
+# Each terrace's bank takes the last part of its width: wide enough to walk up
+# (1.7 m over ~4 m, under 35° at its steepest), so the terraces are no maze.
+BANK_START = 0.72
+# Outside the walkable land a gentle verge runs this far before the hills climb:
+# edges feel open, and a click just past them still finds ground.
+VERGE = 3.0
+VERGE_SLOPE = 0.28
 
 
 def raw_terrace(x):
@@ -64,13 +71,13 @@ def terrace_height(x):
     raw = raw_terrace(x)
     level = math.floor(raw / TERRACE_STEP)
     frac = raw / TERRACE_STEP - level
-    riser = kit.smoothstep(0.93, 1.0, frac)
+    riser = kit.smoothstep(BANK_START, 1.0, frac)
     return (level + riser) * TERRACE_STEP
 
 
 def riser_x(level):
-    """Where the riser up to terrace `level` + 1 stands."""
-    return ((level + 0.965) * TERRACE_STEP - 2.6) / TERRACE_RISE - 14.0
+    """Where the bank up to terrace `level` + 1 starts (its foot)."""
+    return ((level + BANK_START) * TERRACE_STEP - 2.6) / TERRACE_RISE - 14.0
 
 
 # --- noise ----------------------------------------------------------------------------
@@ -151,8 +158,11 @@ def height(x, z):
     coast = x < -50 + 18 * math.sin(z * 0.03) and z > -20
     if coast:
         return max(-4.0, walk - d * 0.32 - (n - 0.5) * 0.6)
-    rise = 3.2 * (1 - math.exp(-d / 2.5)) + d * 0.55
-    return walk + rise * (0.75 + n * 0.8) + (fbm(x * 0.12, z * 0.12, 9) - 0.5) * min(3.0, d * 0.4)
+    if d <= VERGE:
+        return walk + d * VERGE_SLOPE
+    h = d - VERGE
+    rise = 3.2 * (1 - math.exp(-h / 2.5)) + h * 0.55
+    return walk + VERGE * VERGE_SLOPE + rise * (0.75 + n * 0.8) + (fbm(x * 0.12, z * 0.12, 9) - 0.5) * min(3.0, h * 0.4)
 
 
 def surface(x, z, h, slope):
@@ -348,11 +358,14 @@ def plan(L):
 
     # --- Olive terraces -------------------------------------------------------------------
     L.thing("zone", 12, 42, name="The Olive Terraces", subtitle="", radius=26.0, music="field", ambience="cicadas")
-    # Dry-stone walls along each riser, broken where the path climbs.
+    # Dry-stone walls at the foot of each bank: a segment, then two segments' gap
+    # (staggered from terrace to terrace), so the banks can be climbed anywhere.
     for level in range(1, 6):
         x = riser_x(level)
-        for zz in range(14, 74, 4):
+        for k, zz in enumerate(range(14, 74, 4)):
             z = zz + 2.0
+            if (k + level) % 3 != 0:
+                continue
             if math.hypot(x - 12, z - 42) > 25 or not walkable(x, z) or on_path(x, z, 2.0) or features(x, z)[0] > -4.0:
                 continue
             L.prop("stone_wall", x - 0.6, z, rot=90, r=0.0, group="Terraces", sink=0.4)

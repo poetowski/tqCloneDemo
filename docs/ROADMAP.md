@@ -81,3 +81,9 @@ The vertical slice's plan and state. Update this at the end of every working ses
   route links, islands, the sea and walks from old trouble spots. Results: strong hero
   completes in ~3 min, bull down in 53 s; level-1 playthrough reaches the bull at level
   7 with no deaths (after Klotho's chiton), beats it in 1–4 tries, ends at level 9.
+- **2026-11-24 (terrain)** — Easier to walk: terrace banks became walkable slopes with
+  broken wall segments, a 3 m walkable verge along every edge, paths 2 m wider. The
+  path check now measures detours: mean 1.17 → 1.05, worst 3.9 → 1.7, walkable area
+  +32%. Navmesh flood fill compares heights (a temple top no longer counts as reached
+  ground); actors set back on the ground land on its surface, not the navmesh's height.
+  Fixed: a hovered item or foe freed under the cursor threw errors on every click.

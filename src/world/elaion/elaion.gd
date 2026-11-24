@@ -156,8 +156,61 @@ func _check_paths() -> void:
 				if islands <= 8:
 					print("[paths] cut off: polygon %d at %s" % [p, centre])
 		print("[paths] %d of %d polygon(s) cut off from the start, %d under the sea" % [islands, mesh.get_polygon_count(), underwater])
+		_detours(map, mesh)
 	await _walk_tests()
 	DevTools.finish_shot()
+
+
+## How easy the ground is to cross: for random pairs of walkable points 8–30 m apart
+## (seeded, so runs compare), the walk over the straight line. A maze of risers and
+## walls shows as long detours. Weighted by area, so big open ground counts more.
+func _detours(map: RID, mesh: NavigationMesh) -> void:
+	var vertices := mesh.get_vertices()
+	var centres: Array[Vector3] = []
+	var weights: Array[float] = []
+	var total := 0.0
+	for p in mesh.get_polygon_count():
+		var polygon := mesh.get_polygon(p)
+		var centre := Vector3.ZERO
+		for index in polygon:
+			centre += vertices[index]
+		centres.append(navigation.global_transform * (centre / float(polygon.size())))
+		var a := vertices[polygon[0]]
+		var area := 0.0
+		for k in range(1, polygon.size() - 1):
+			area += (vertices[polygon[k]] - a).cross(vertices[polygon[k + 1]] - a).length() * 0.5
+		total += area
+		weights.append(total)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	var ratios: Array[float] = []
+	var worst: Array = []
+	var tries := 0
+	while ratios.size() < 400 and tries < 20000:
+		tries += 1
+		var a := centres[weights.bsearch(rng.randf() * total)]
+		var b := centres[weights.bsearch(rng.randf() * total)]
+		var straight := Vector2(b.x - a.x, b.z - a.z).length()
+		if straight < 8.0 or straight > 30.0:
+			continue
+		var path := NavigationServer3D.map_get_path(map, a, b, true)
+		var length := 0.0
+		for k in range(1, path.size()):
+			length += path[k - 1].distance_to(path[k])
+		var ratio := length / straight
+		ratios.append(ratio)
+		worst.append([ratio, a, b])
+	ratios.sort()
+	worst.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) > float(y[0]))
+	var mean := 0.0
+	for r in ratios:
+		mean += r
+	mean /= maxf(1.0, float(ratios.size()))
+	var walkable_area := total
+	print("[paths] detours over %d pairs: mean %.2f, median %.2f, 90th %.2f, worst %.2f; walkable area %d m²" % [ratios.size(), mean,
+		ratios[ratios.size() / 2], ratios[int(ratios.size() * 0.9)], ratios[ratios.size() - 1], int(walkable_area)])
+	for k in 5:
+		print("[paths]   long way round: x%.1f from %s to %s" % [float(worst[k][0]), worst[k][1], worst[k][2]])
 
 
 ## Spots where the hero once got pinned: put it there, order a walk, and see it
@@ -177,7 +230,8 @@ func _walk_tests() -> void:
 	await get_tree().physics_frame
 	var stalled := 0
 	for test: Array in WALK_TESTS:
-		var from := test[0] as Vector3
+		# (Heights in the table are only hints: start on the ground as it is now.)
+		var from := player.ground_below(test[0] as Vector3)
 		var goal := test[1] as Vector3
 		player.global_position = from
 		player.velocity = Vector3.ZERO
@@ -185,10 +239,18 @@ func _walk_tests() -> void:
 		await get_tree().physics_frame
 		var arrived := false
 		var trail: Array[String] = []
+		var lowest := INF
+		var fall_from := Vector3.ZERO
+		var last := player.global_position
 		for frame in 1800:
 			# Ordered every frame, as the autopilot (and a held mouse button) does.
 			player.command_move(goal)
 			await get_tree().physics_frame
+			if player.global_position.y < lowest:
+				lowest = player.global_position.y
+				if last.y - player.global_position.y > 0.5 and fall_from == Vector3.ZERO:
+					fall_from = last
+			last = player.global_position
 			if frame % 120 == 0:
 				trail.append("(%.1f, %.1f, %.1f)" % [player.global_position.x, player.global_position.y, player.global_position.z])
 			if Vector2(player.global_position.x - goal.x, player.global_position.z - goal.z).length() < 1.5:
@@ -199,7 +261,10 @@ func _walk_tests() -> void:
 			var collider := player.get_slide_collision(k).get_collider() as Node
 			if collider:
 				pressed.append("%s/%s" % [collider.get_parent().name if collider.get_parent() else "", collider.name])
-		if not arrived:
+		var fell := lowest < minf(from.y, goal.y) - 2.0
+		if fell:
+			print("[paths] walk %s -> %s FELL to y %.1f, first drop from %s" % [from, goal, lowest, fall_from])
+		if not arrived or fell:
 			stalled += 1
 		var path := player.path
 		var index := player.path_index
