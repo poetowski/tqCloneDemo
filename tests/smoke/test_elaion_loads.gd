@@ -43,6 +43,14 @@ func test_a_lit_hearth_heals_only_once() -> void:
 	player.health = player.max_health()
 
 
+func test_a_freed_hover_target_is_forgotten() -> void:
+	var item := GroundItem.spawn(Item.create(&"potion_health"), Game.player.global_position + Vector3(3, 0, 0), Game.player.global_position)
+	Game.player.hovered = item
+	item.free()
+	Game.player._unhandled_input(InputEventAction.new())
+	assert_null(Game.player.hovered, "the picked-up item no longer counts as under the cursor")
+
+
 func test_first_quest_started() -> void:
 	assert_true(Quests.is_active(&"weaver"))
 

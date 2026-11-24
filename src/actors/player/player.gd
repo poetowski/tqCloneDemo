@@ -197,6 +197,7 @@ func deal(target: Actor, info: DamageInfo) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not input_enabled or is_dead:
 		return
+	_forget_freed_hover()
 	if event.is_action_pressed(&"move_click"):
 		_force_attack = Input.is_action_pressed(&"force_attack")
 		_click()
@@ -235,6 +236,7 @@ func _held_click(delta: float) -> void:
 	if _hold_repath > 0.0:
 		return
 	_hold_repath = 0.12
+	_forget_freed_hover()
 	if _command == Command.MOVE and _ground_valid:
 		_move_target = _ground_point
 	elif _command == Command.NONE and _ground_valid and not is_busy():
@@ -274,6 +276,7 @@ func halt() -> void:
 
 
 func _update_hover() -> void:
+	_forget_freed_hover()
 	if Game.camera == null:
 		return
 	var mouse := get_viewport().get_mouse_position()
@@ -298,8 +301,16 @@ func _update_hover() -> void:
 		hover_changed.emit(hovered)
 
 
+## What the cursor was over may be gone (an item picked up, a foe dissolved): a
+## freed object can't even be passed as a typed argument, so drop it first.
+func _forget_freed_hover() -> void:
+	if hovered != null and not is_instance_valid(hovered):
+		hovered = null
+		hover_changed.emit(null)
+
+
 func _highlight(thing: Node3D, on: bool) -> void:
-	if thing == null or not is_instance_valid(thing):
+	if thing == null:
 		return
 	var thing_body := thing.get(&"body") as ActorBody
 	if thing_body == null:
